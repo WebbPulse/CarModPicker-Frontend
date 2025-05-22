@@ -1,4 +1,29 @@
+import { useEffect } from 'react';
+
 function Home() {
+  useEffect(() => {
+    fetch('/api/users/1', 
+      // fetch('http://localhost:8000/api/test', // Uncomment this line if you want to test without proxy
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    ) // Or any other endpoint your backend might have
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('API Response:', data);
+      })
+      .catch(error => {
+        console.error('API Error:', error);
+      });
+  }, []); // Empty dependency array means this effect runs once on mount
 
   return (
     <>
