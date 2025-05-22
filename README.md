@@ -1,6 +1,6 @@
-# React + TypeScript + Vite
+# CarModPicker-Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A frontend application for selecting and customizing car modifications, built with React, TypeScript, and Vite.
 
 Currently, two official plugins are available:
 
