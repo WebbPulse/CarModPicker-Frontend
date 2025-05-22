@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 function Home() {
   useEffect(() => {
     fetch('/api/users/1', 
-      // fetch('http://localhost:8000/api/test', // Uncomment this line if you want to test without proxy
       {
         method: 'GET',
         headers: {
