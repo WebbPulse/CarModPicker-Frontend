@@ -48,9 +48,9 @@ function App() {
           <Route path="/builder/car/:carId" element={<ViewCar />} />
           <Route path="/builder/car/:carId/edit" element={<EditCar />} />
           
-          <Route path="/builder/buildList/create" element={<CreateBuildList />} />
-          <Route path="/builder/buildList/:buildListId" element={<ViewBuildList />} />
-          <Route path="/builder/buildList/:buildListId/edit" element={<EditBuildList />} />
+          <Route path="/builder/build-list/create" element={<CreateBuildList />} />
+          <Route path="/builder/build-list/:buildListId" element={<ViewBuildList />} />
+          <Route path="/builder/build-list/:buildListId/edit" element={<EditBuildList />} />
           
           <Route path="/builder/part/create" element={<CreatePart />} />
           <Route path="/builder/part/:partId" element={<ViewPart />} />
