@@ -1,28 +1,38 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import apiClient from '../services/api'; // Adjust path as needed
 
-function Home() {
+interface UserData {
+  id: number;
+  name: string;
+  email: string;
+}
+
+export default function HomePage() {
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
   useEffect(() => {
-    fetch('/api/users/1', 
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+    const fetchUser = async () => {
+      try {
+        // The baseURL '/api' is prepended automatically
+        const response = await apiClient.get('/users/1');
+        setUserData(response.data);
+      } catch (err: any) {
+        console.error('Failed to fetch user:', err);
+        setError(err.message || 'Failed to fetch user data');
       }
-    ) // Or any other endpoint your backend might have
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(data => {
-        console.log('API Response:', data);
-      })
-      .catch(error => {
-        console.error('API Error:', error);
-      });
-  }, []); // Empty dependency array means this effect runs once on mount
+    };
+
+    fetchUser();
+  }, []);
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (!userData) {
+    return <div>Loading user...</div>;
+  }
 
   return (
     <div className="text-center"> {/* Added text-center for the content */}
@@ -35,9 +45,7 @@ function Home() {
         <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
             Learn More
         </button>
-    </div>
+      </div>
     </div>
   );
 }
-
-export default Home;
