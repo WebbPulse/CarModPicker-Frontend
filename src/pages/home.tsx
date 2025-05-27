@@ -1,8 +1,14 @@
 import { useEffect, useState } from 'react';
 import apiClient from '../services/api'; // Adjust path as needed
 
+interface UserData {
+  id: number;
+  name: string;
+  email: string;
+}
+
 export default function HomePage() {
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState<UserData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
