@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams } from 'react-router-dom';
 
 function ViewPart() {
   const { partId } = useParams(); // partId will contain the UUID from the URL

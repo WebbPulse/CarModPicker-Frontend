@@ -1,6 +1,5 @@
 import { useParams } from 'react-router-dom';
 
-
 function ViewCar() {
   const { carId } = useParams(); // carId will contain the UUID from the URL
 
