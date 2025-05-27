@@ -3,6 +3,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import Input from '../../components/input';
 import Button from '../../components/button';
 import apiClient from '../../services/api';
+import { AxiosError } from 'axios'; // Import AxiosError
+import type {
+  UserRead,
+  HTTPValidationError,
+  ValidationError,
+} from '../../types/api';
 
 function Login() {
   const [username, setUsername] = useState('');
@@ -15,44 +21,43 @@ function Login() {
     setError(null);
 
     try {
-      // NOTE: Replace '/auth/login' with your actual backend login endpoint.
       const formData = new URLSearchParams();
       formData.append('username', username);
       formData.append('password', password);
 
-      const response = await apiClient.post('/token', formData, {
+      const response = await apiClient.post<UserRead>('/token', formData, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
       });
-      // localStorage.setItem('authToken', response.data.token);
       console.log('Login successful:', response.data);
       navigate('/'); // Redirect to a protected route or dashboard
-    } catch (err: any) {
+    } catch (err) {
       console.error('Login failed:', err);
-      if (err.response && err.response.data && err.response.data.detail) {
-        if (Array.isArray(err.response.data.detail)) {
+      const axiosError = err as AxiosError<HTTPValidationError>;
+      if (
+        axiosError.response &&
+        axiosError.response.data &&
+        axiosError.response.data.detail
+      ) {
+        if (Array.isArray(axiosError.response.data.detail)) {
           // Map through the error details and join their messages
-          const messages = err.response.data.detail
-            .map(
-              (detailItem: { msg: string; [key: string]: any }) =>
-                detailItem.msg
-            )
+          const messages = axiosError.response.data.detail
+            .map((detailItem: ValidationError) => detailItem.msg)
             .join('. ');
           setError(messages);
-        } else if (typeof err.response.data.detail === 'string') {
-          // If detail is already a string (some APIs might return this)
-          setError(err.response.data.detail);
+        } else if (typeof axiosError.response.data.detail === 'string') {
+          setError(axiosError.response.data.detail);
         } else {
           // Fallback for unexpected detail format
           setError('An unexpected error format was received.');
         }
       } else if (
-        err.response &&
-        err.response.data &&
-        err.response.data.message
+        axiosError.response &&
+        axiosError.response.data &&
+        (axiosError.response.data as any).message
       ) {
-        setError(err.response.data.message);
+        setError((axiosError.response.data as any).message);
       } else {
         setError('Login failed. Please check your credentials and try again.');
       }

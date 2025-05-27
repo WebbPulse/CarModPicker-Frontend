@@ -3,6 +3,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import Input from '../../components/input';
 import Button from '../../components/button';
 import apiClient from '../../services/api';
+import { AxiosError } from 'axios';
+import type {
+  UserCreate,
+  UserRead,
+  HTTPValidationError,
+  ValidationError,
+} from '../../types/api';
 
 function Register() {
   const [username, setUsername] = useState('');
@@ -22,38 +29,40 @@ function Register() {
     }
 
     try {
-      // NOTE: Replace '/users/' with your actual backend registration endpoint.
-      // The payload might also differ based on your backend requirements.
-      const response = await apiClient.post('/users/', {
-        username: username,
-        email: email,
-        password: password,
-      });
+      const response = await apiClient.post<UserRead>(
+        '/users/',
+        {
+          username: username,
+          email: email,
+          password: password,
+        } as UserCreate // Cast payload to UserCreate
+      );
       console.log('Registration successful:', response.data);
-      // Optionally, navigate to login page or show a success message
       navigate('/login');
-    } catch (err: any) {
+    } catch (err) {
       console.error('Registration failed:', err);
-      if (err.response && err.response.data && err.response.data.detail) {
-        if (Array.isArray(err.response.data.detail)) {
-          const messages = err.response.data.detail
-            .map(
-              (detailItem: { msg: string; [key: string]: any }) =>
-                detailItem.msg
-            )
+      const axiosError = err as AxiosError<HTTPValidationError>;
+      if (
+        axiosError.response &&
+        axiosError.response.data &&
+        axiosError.response.data.detail
+      ) {
+        if (Array.isArray(axiosError.response.data.detail)) {
+          const messages = axiosError.response.data.detail
+            .map((detailItem: ValidationError) => detailItem.msg)
             .join('. ');
           setError(messages);
-        } else if (typeof err.response.data.detail === 'string') {
-          setError(err.response.data.detail);
+        } else if (typeof axiosError.response.data.detail === 'string') {
+          setError(axiosError.response.data.detail);
         } else {
           setError('An unexpected error format was received.');
         }
       } else if (
-        err.response &&
-        err.response.data &&
-        err.response.data.message
+        axiosError.response &&
+        axiosError.response.data &&
+        (axiosError.response.data as any).message
       ) {
-        setError(err.response.data.message);
+        setError((axiosError.response.data as any).message);
       } else {
         setError('Registration failed. Please try again.');
       }
