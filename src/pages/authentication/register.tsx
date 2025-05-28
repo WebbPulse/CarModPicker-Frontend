@@ -10,6 +10,8 @@ import type {
   HTTPValidationError,
   ValidationError,
 } from '../../types/api';
+import AuthCard from '../../components/authCard';
+import ErrorAlert from '../../components/errorAlert'; // Add this import
 
 function Register() {
   const [username, setUsername] = useState('');
@@ -70,84 +72,69 @@ function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 p-10 bg-gray-800 rounded-xl shadow-lg">
+    <AuthCard title="Create your account">
+      <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <Input
+          label="Username"
+          id="username"
+          name="username"
+          type="username"
+          autoComplete="username"
+          required
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Username"
+        />
+        <Input
+          label="Email address"
+          id="email"
+          name="email"
+          type="email"
+          autoComplete="email"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="you@example.com"
+        />
+        <Input
+          label="Password"
+          id="password"
+          name="password"
+          type="password"
+          autoComplete="new-password"
+          required
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Password"
+        />
+        <Input
+          label="Confirm Password"
+          id="confirm-password"
+          name="confirm-password"
+          type="password"
+          autoComplete="new-password"
+          required
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          placeholder="Confirm Password"
+        />
+
+        <ErrorAlert message={error} />
+
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-white">
-            Create your account
-          </h2>
+          <Button type="submit">Sign up</Button>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <Input
-            label="Username"
-            id="username"
-            name="username"
-            type="username"
-            autoComplete="username"
-            required
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Username"
-          />
-          <Input
-            label="Email address"
-            id="email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@example.com"
-          />
-          <Input
-            label="Password"
-            id="password"
-            name="password"
-            type="password"
-            autoComplete="new-password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-          />
-          <Input
-            label="Confirm Password"
-            id="confirm-password"
-            name="confirm-password"
-            type="password"
-            autoComplete="new-password"
-            required
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            placeholder="Confirm Password"
-          />
-
-          {error && (
-            <div className="rounded-md bg-red-900 bg-opacity-50 p-4">
-              <div className="flex">
-                <div className="ml-3">
-                  <p className="text-sm font-medium text-red-300">{error}</p>
-                </div>
-              </div>
-            </div>
-          )}
-
-          <div>
-            <Button type="submit">Sign up</Button>
-          </div>
-        </form>
-        <p className="mt-6 text-center text-sm text-gray-400">
-          Already have an account?{' '}
-          <Link
-            to="/login"
-            className="font-medium text-indigo-400 hover:text-indigo-300"
-          >
-            Sign in
-          </Link>
-        </p>
-      </div>
-    </div>
+      </form>
+      <p className="mt-6 text-center text-sm text-gray-400">
+        Already have an account?{' '}
+        <Link
+          to="/login"
+          className="font-medium text-indigo-400 hover:text-indigo-300"
+        >
+          Sign in
+        </Link>
+      </p>
+    </AuthCard>
   );
 }
 export default Register;

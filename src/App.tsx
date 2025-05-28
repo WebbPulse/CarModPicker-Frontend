@@ -8,6 +8,8 @@ import VerifyEmail from './pages/authentication/verifyEmail.tsx';
 import Profile from './pages/profile.tsx';
 import Builder from './pages/builder/builder.tsx';
 
+import ViewUser from './pages/viewUser.tsx';
+
 import CreateCar from './pages/builder/cars/createCar.tsx';
 import EditCar from './pages/builder/cars/editCar.tsx';
 import ViewCar from './pages/builder/cars/viewCar.tsx';
@@ -26,6 +28,7 @@ import ContactUs from './pages/contactUs.tsx';
 
 import Header from './components/header.tsx';
 import Footer from './components/footer.tsx';
+import ProtectedRoute from './components/protectedRoute'; // Import ProtectedRoute
 
 function App() {
   return (
@@ -33,42 +36,46 @@ function App() {
       <Header />
       <main className="flex-grow container mx-auto p-4">
         <Routes>
+          {/* Public Routes */}
+          <Route
+            path="*"
+            element={<div className="text-center">Page Not Found</div>}
+          />
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgotPassword" element={<ForgotPassword />} />
           <Route path="/verifyEmail" element={<VerifyEmail />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/builder" element={<Builder />} />
-
-          <Route path="/builder/car/create" element={<CreateCar />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/privacyPolicy" element={<PrivacyPolicy />} />
+          <Route path="/contactUs" element={<ContactUs />} />
+          <Route path="/user/:username" element={<ViewUser />} />
+          {/* Builder Routes */}
           <Route path="/builder/car/:carId" element={<ViewCar />} />
-          <Route path="/builder/car/:carId/edit" element={<EditCar />} />
-
-          <Route
-            path="/builder/build-list/create"
-            element={<CreateBuildList />}
-          />
+          <Route path="/builder/part/:partId" element={<ViewPart />} />
           <Route
             path="/builder/build-list/:buildListId"
             element={<ViewBuildList />}
           />
-          <Route
-            path="/builder/build-list/:buildListId/edit"
-            element={<EditBuildList />}
-          />
+          {/* Protected Routes */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/builder" element={<Builder />} />
+            <Route path="/builder/car/create" element={<CreateCar />} />
 
-          <Route path="/builder/part/create" element={<CreatePart />} />
-          <Route path="/builder/part/:partId" element={<ViewPart />} />
-          <Route path="/builder/part/:partId/edit" element={<EditPart />} />
+            <Route path="/builder/car/:carId/edit" element={<EditCar />} />
+            <Route
+              path="/builder/build-list/create"
+              element={<CreateBuildList />}
+            />
+            <Route
+              path="/builder/build-list/:buildListId/edit"
+              element={<EditBuildList />}
+            />
+            <Route path="/builder/part/create" element={<CreatePart />} />
 
-          <Route path="/about" element={<About />} />
-          <Route path="/privacyPolicy" element={<PrivacyPolicy />} />
-          <Route path="/contactUs" element={<ContactUs />} />
-          <Route
-            path="*"
-            element={<div className="text-center">Page Not Found</div>}
-          />
+            <Route path="/builder/part/:partId/edit" element={<EditPart />} />
+          </Route>
         </Routes>
       </main>
       <Footer />

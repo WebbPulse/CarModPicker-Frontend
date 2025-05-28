@@ -12,8 +12,6 @@ export interface UserRead {
   id: number;
   username: string;
   email: string;
-  first_name?: string | null;
-  last_name?: string | null;
   disabled: boolean;
 }
 
@@ -21,15 +19,11 @@ export interface UserCreate {
   username: string;
   email: string;
   password: string;
-  first_name?: string | null;
-  last_name?: string | null;
 }
 
 export interface UserUpdate {
   username?: string | null;
   email?: string | null;
-  first_name?: string | null;
-  last_name?: string | null;
   disabled?: boolean | null;
   password?: string | null;
 }
@@ -118,6 +112,3 @@ export interface BodyLoginForAccessToken {
   client_id?: string | null;
   client_secret?: string | null;
 }
-
-// You can then import these types in your components, for example:
-// import { UserRead, HTTPValidationError } from '../types/api';
