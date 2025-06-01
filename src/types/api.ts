@@ -13,6 +13,7 @@ export interface UserRead {
   username: string;
   email: string;
   disabled: boolean;
+  email_verified: boolean;
 }
 
 export interface UserCreate {

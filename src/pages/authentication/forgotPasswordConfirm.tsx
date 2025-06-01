@@ -8,7 +8,7 @@ import { ErrorAlert, ConfirmationAlert } from '../../components/alerts';
 import AuthRedirectLink from '../../components/auth/authRedirectLink';
 import useApiRequest from '../../hooks/useApiRequest';
 import AuthForm from '../../components/auth/authForm';
-import type { NewPassword } from '../../types/api'; // Assuming NewPassword type is defined
+import type { NewPassword } from '../../types/api';
 
 function ForgotPasswordConfirm() {
   const [newPassword, setNewPassword] = useState('');
@@ -31,9 +31,10 @@ function ForgotPasswordConfirm() {
     isLoading,
     executeRequest: confirmPasswordReset,
     setError: setApiError,
-  } = useApiRequest<any, { token: string; newPasswordData: NewPassword }>( // Use 'any' for response data if not specific
-    forgotPasswordConfirmRequestFn
-  );
+  } = useApiRequest<
+    Record<string, never>,
+    { token: string; newPasswordData: NewPassword }
+  >(forgotPasswordConfirmRequestFn);
 
   useEffect(() => {
     if (!token) {

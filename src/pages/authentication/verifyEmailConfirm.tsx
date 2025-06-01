@@ -1,20 +1,45 @@
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import AuthCard from '../../components/auth/authCard';
+import { ErrorAlert, ConfirmationAlert } from '../../components/alerts';
+import AuthRedirectLink from '../../components/auth/authRedirectLink';
+
 function VerifyEmailConfirm() {
+  const [searchParams] = useSearchParams();
+  const [status, setStatus] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    const statusParam = searchParams.get('status');
+    const messageParam = searchParams.get('message');
+
+    if (statusParam) {
+      setStatus(statusParam);
+    }
+    if (messageParam) {
+      setMessage(messageParam);
+    }
+  }, [searchParams]);
+
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-md w-96">
-        <h1 className="text-2xl font-bold mb-4">Verify Your Email</h1>
-        <p className="text-gray-600 mb-6">
-          Please check your email for a verification link. Click the link to
-          confirm your email address.
-        </p>
-        <button
-          onClick={() => (window.location.href = '/login')}
-          className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-200"
-        >
-          Go to Login
-        </button>
+    <AuthCard title="Email Verification Result">
+      <div>
+        {status === 'success' && <ConfirmationAlert message={message} />}
+        {status === 'info' && <ConfirmationAlert message={message} />}
+        {status === 'error' && <ErrorAlert message={message} />}
+        {!status && (
+          <>
+            <ErrorAlert message="Invalid or missing verification link. Please request a new verification email if needed." />
+            <AuthRedirectLink
+              text="Request a new"
+              linkText="Verification Email"
+              to="/verify-email"
+            />
+          </>
+        )}
+        {status && <AuthRedirectLink text="Back to" linkText="Home" to="/" />}
       </div>
-    </div>
+    </AuthCard>
   );
 }
 export default VerifyEmailConfirm;

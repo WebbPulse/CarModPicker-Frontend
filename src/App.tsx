@@ -6,6 +6,7 @@ import Register from './pages/authentication/register.tsx';
 import ForgotPassword from './pages/authentication/forgotPassword.tsx';
 import ForgotPasswordConfirm from './pages/authentication/forgotPasswordConfirm.tsx';
 import VerifyEmail from './pages/authentication/verifyEmail.tsx';
+import VerifyEmailConfirm from './pages/authentication/verifyEmailConfirm.tsx';
 import Profile from './pages/profile.tsx';
 import Builder from './pages/builder/builder.tsx';
 
@@ -29,7 +30,9 @@ import ContactUs from './pages/contactUs.tsx';
 
 import Header from './components/header.tsx';
 import Footer from './components/footer.tsx';
-import ProtectedRoute from './components/protectedRoute'; // Import ProtectedRoute
+import ProtectedRoute from './components/routes/protectedRoute';
+import EmailVerifiedRoute from './components/routes/emailVerifiedRoute.tsx';
+import GuestRoute from './components/routes/guestRoute';
 
 function App() {
   return (
@@ -43,15 +46,14 @@ function App() {
             element={<div className="text-center">Page Not Found</div>}
           />
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route
-            path="/forgot-password/confirm"
-            element={<ForgotPasswordConfirm />}
-          />
-          <Route path="/verify-email" element={<VerifyEmail />} />
-          <Route path="/verify-email/confirm" element={<VerifyEmail />} />
+
+          {/* Guest Routes (redirect if logged in) */}
+          <Route element={<GuestRoute />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+          </Route>
+
           <Route path="/about" element={<About />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/contact-us" element={<ContactUs />} />
@@ -62,23 +64,34 @@ function App() {
             path="/builder/build-list/:buildListId"
             element={<ViewBuildList />}
           />
+          <Route
+            path="/verify-email/confirm"
+            element={<VerifyEmailConfirm />}
+          />
+          <Route
+            path="/forgot-password/confirm"
+            element={<ForgotPasswordConfirm />}
+          />
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/builder" element={<Builder />} />
-            <Route path="/builder/car/create" element={<CreateCar />} />
-            <Route path="/builder/car/:carId/edit" element={<EditCar />} />
-            <Route
-              path="/builder/build-list/create"
-              element={<CreateBuildList />}
-            />
-            <Route
-              path="/builder/build-list/:buildListId/edit"
-              element={<EditBuildList />}
-            />
-            <Route path="/builder/part/create" element={<CreatePart />} />
+            <Route path="/verify-email" element={<VerifyEmail />} />
+            <Route element={<EmailVerifiedRoute />}>
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/builder" element={<Builder />} />
 
-            <Route path="/builder/part/:partId/edit" element={<EditPart />} />
+              <Route path="/builder/car/create" element={<CreateCar />} />
+              <Route path="/builder/car/:carId/edit" element={<EditCar />} />
+              <Route
+                path="/builder/build-list/create"
+                element={<CreateBuildList />}
+              />
+              <Route
+                path="/builder/build-list/:buildListId/edit"
+                element={<EditBuildList />}
+              />
+              <Route path="/builder/part/create" element={<CreatePart />} />
+              <Route path="/builder/part/:partId/edit" element={<EditPart />} />
+            </Route>
           </Route>
         </Routes>
       </main>

@@ -13,7 +13,7 @@ function ForgotPassword() {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const forgotPasswordRequestFn = (payload: { email: string }) =>
-    apiClient.post('/auth/forgot-password', payload);
+    apiClient.post<Record<string, never>>('/auth/forgot-password', payload);
 
   const {
     error: apiError,
