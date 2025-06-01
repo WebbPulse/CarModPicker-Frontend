@@ -39,7 +39,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       console.info('User not authenticated or failed to fetch status:', error);
       setUser(null);
       setIsAuthenticated(false);
-      navigate('/login'); // Redirect to login if not authenticated
     } finally {
       setIsLoading(false);
     }

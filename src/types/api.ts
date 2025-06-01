@@ -104,6 +104,10 @@ export interface PartUpdate {
   build_list_id?: number | null;
 }
 
+export interface NewPassword {
+  password: string;
+}
+
 export interface BodyLoginForAccessToken {
   grant_type?: 'password' | null;
   username: string;

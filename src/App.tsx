@@ -4,6 +4,7 @@ import Home from './pages/home.tsx';
 import Login from './pages/authentication/login.tsx';
 import Register from './pages/authentication/register.tsx';
 import ForgotPassword from './pages/authentication/forgotPassword.tsx';
+import ForgotPasswordConfirm from './pages/authentication/forgotPasswordConfirm.tsx';
 import VerifyEmail from './pages/authentication/verifyEmail.tsx';
 import Profile from './pages/profile.tsx';
 import Builder from './pages/builder/builder.tsx';
@@ -44,13 +45,17 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/forgotPassword" element={<ForgotPassword />} />
-          <Route path="/verifyEmail" element={<VerifyEmail />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route
+            path="/forgot-password/confirm"
+            element={<ForgotPasswordConfirm />}
+          />
+          <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/verify-email/confirm" element={<VerifyEmail />} />
           <Route path="/about" element={<About />} />
-          <Route path="/privacyPolicy" element={<PrivacyPolicy />} />
-          <Route path="/contactUs" element={<ContactUs />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/user/:username" element={<ViewUser />} />
-          {/* Builder Routes */}
           <Route path="/builder/car/:carId" element={<ViewCar />} />
           <Route path="/builder/part/:partId" element={<ViewPart />} />
           <Route
@@ -62,7 +67,6 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/builder" element={<Builder />} />
             <Route path="/builder/car/create" element={<CreateCar />} />
-
             <Route path="/builder/car/:carId/edit" element={<EditCar />} />
             <Route
               path="/builder/build-list/create"

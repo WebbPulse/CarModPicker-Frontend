@@ -1,89 +1,74 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Input from '../../components/input';
 import Button from '../../components/button';
 import apiClient from '../../services/api';
-import { AxiosError } from 'axios';
-import type {
-  UserCreate,
-  UserRead,
-  HTTPValidationError,
-  ValidationError,
-} from '../../types/api';
-import AuthCard from '../../components/authCard';
-import ErrorAlert from '../../components/errorAlert'; // Add this import
+import type { UserCreate, UserRead } from '../../types/api';
+import AuthCard from '../../components/auth/authCard';
+import { ErrorAlert } from '../../components/alerts';
+import AuthRedirectLink from '../../components/auth/authRedirectLink';
+import useApiRequest from '../../hooks/useApiRequest';
+import AuthForm from '../../components/auth/authForm';
 
 function Register() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+
+  const registerRequestFn = (payload: UserCreate) =>
+    apiClient.post<UserRead>('/users/', payload);
+
+  const {
+    error: apiError,
+    isLoading,
+    executeRequest: performRegistration,
+    setError: setApiError,
+  } = useApiRequest(registerRequestFn);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setError(null);
+    setApiError(null); // Clear previous errors
 
     if (password !== confirmPassword) {
-      setError("Passwords don't match.");
+      setApiError("Passwords don't match.");
       return;
     }
 
-    try {
-      const response = await apiClient.post<UserRead>(
-        '/users/',
-        {
-          username: username,
-          email: email,
-          password: password,
-        } as UserCreate // Cast payload to UserCreate
-      );
-      console.log('Registration successful:', response.data);
-      navigate('/login');
-    } catch (err) {
-      console.error('Registration failed:', err);
-      const axiosError = err as AxiosError<HTTPValidationError>;
-      if (
-        axiosError.response &&
-        axiosError.response.data &&
-        axiosError.response.data.detail
-      ) {
-        if (Array.isArray(axiosError.response.data.detail)) {
-          const messages = axiosError.response.data.detail
-            .map((detailItem: ValidationError) => detailItem.msg)
-            .join('. ');
-          setError(messages);
-        } else if (typeof axiosError.response.data.detail === 'string') {
-          setError(axiosError.response.data.detail);
-        } else {
-          setError('An unexpected error format was received.');
-        }
-      } else if (
-        axiosError.response &&
-        axiosError.response.data &&
-        (axiosError.response.data as any).message
-      ) {
-        setError((axiosError.response.data as any).message);
-      } else {
-        setError('Registration failed. Please try again.');
-      }
+    if (!username.trim() || !email.trim() || !password.trim()) {
+      setApiError('All fields are required.');
+      return;
+    }
+
+    const payload: UserCreate = {
+      username: username,
+      email: email,
+      password: password,
+    };
+
+    const result = await performRegistration(payload);
+
+    if (result) {
+      console.log('Registration successful:', result);
+      navigate('/login'); // Redirect to login page after successful registration
     }
   };
 
   return (
     <AuthCard title="Create your account">
-      <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+      <AuthForm onSubmit={handleSubmit}>
         <Input
           label="Username"
           id="username"
           name="username"
-          type="username"
+          type="text"
           autoComplete="username"
           required
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           placeholder="Username"
+          disabled={isLoading}
         />
         <Input
           label="Email address"
@@ -95,6 +80,7 @@ function Register() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@example.com"
+          disabled={isLoading}
         />
         <Input
           label="Password"
@@ -106,6 +92,7 @@ function Register() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
+          disabled={isLoading}
         />
         <Input
           label="Confirm Password"
@@ -117,23 +104,22 @@ function Register() {
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
           placeholder="Confirm Password"
+          disabled={isLoading}
         />
 
-        <ErrorAlert message={error} />
+        <ErrorAlert message={apiError} />
 
         <div>
-          <Button type="submit">Sign up</Button>
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? 'Signing up...' : 'Sign up'}
+          </Button>
         </div>
-      </form>
-      <p className="mt-6 text-center text-sm text-gray-400">
-        Already have an account?{' '}
-        <Link
-          to="/login"
-          className="font-medium text-indigo-400 hover:text-indigo-300"
-        >
-          Sign in
-        </Link>
-      </p>
+      </AuthForm>
+      <AuthRedirectLink
+        text="Already have an account?"
+        linkText="Sign in"
+        to="/login"
+      />
     </AuthCard>
   );
 }

@@ -3,85 +3,72 @@ import { Link, useNavigate } from 'react-router-dom';
 import Input from '../../components/input';
 import Button from '../../components/button';
 import apiClient from '../../services/api';
-import { AxiosError } from 'axios';
-import type {
-  UserRead,
-  HTTPValidationError,
-  ValidationError,
-} from '../../types/api';
-import AuthCard from '../../components/authCard';
-import ErrorAlert from '../../components/errorAlert';
-import { useAuth } from '../../contexts/authContext'; // Add this import
+import type { UserRead } from '../../types/api'; // Keep UserRead if needed for response type
+import AuthCard from '../../components/auth/authCard';
+import { ErrorAlert } from '../../components/alerts';
+import { useAuth } from '../../contexts/authContext';
+import AuthRedirectLink from '../../components/auth/authRedirectLink';
+import useApiRequest from '../../hooks/useApiRequest';
+import AuthForm from '../../components/auth/authForm';
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
-  const { login: authLogin } = useAuth(); // Get login function from context
+  const { login: authLogin } = useAuth();
+
+  const loginRequestFn = (payload: URLSearchParams) =>
+    apiClient.post<UserRead>('/auth/token', payload, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
+
+  const {
+    error: apiError,
+    isLoading,
+    executeRequest: performLogin,
+    setError: setApiError,
+  } = useApiRequest(loginRequestFn);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setError(null);
+    setApiError(null); // Clear previous errors
 
-    try {
-      const formData = new URLSearchParams();
-      formData.append('username', username);
-      formData.append('password', password);
-
-      const response = await apiClient.post<UserRead>('/auth/token', formData, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      });
-      console.log('Login successful:', response.data);
-      authLogin(response.data); // Update auth context
-      // Optionally, explicitly call checkAuthStatus if you want to be absolutely sure after login
-      // await checkAuthStatus();
-      navigate('/');
-    } catch (err) {
-      console.error('Login failed:', err);
-      const axiosError = err as AxiosError<HTTPValidationError>;
-      if (
-        axiosError.response &&
-        axiosError.response.data &&
-        axiosError.response.data.detail
-      ) {
-        if (Array.isArray(axiosError.response.data.detail)) {
-          const messages = axiosError.response.data.detail
-            .map((detailItem: ValidationError) => detailItem.msg)
-            .join('. ');
-          setError(messages);
-        } else if (typeof axiosError.response.data.detail === 'string') {
-          setError(axiosError.response.data.detail);
-        } else {
-          setError('An unexpected error format was received.');
-        }
-      } else if (
-        axiosError.response &&
-        axiosError.response.data &&
-        (axiosError.response.data as any).message
-      ) {
-        setError((axiosError.response.data as any).message);
-      } else {
-        setError('Login failed. Please check your credentials and try again.');
-      }
+    if (!username.trim() || !password.trim()) {
+      setApiError('Username and password cannot be empty.');
+      return;
     }
+
+    const formData = new URLSearchParams();
+    formData.append('username', username);
+    formData.append('password', password);
+
+    const result = await performLogin(formData);
+
+    if (result) {
+      // Successfully logged in
+      console.log('Login successful:', result);
+      authLogin(result);
+      navigate('/');
+    }
+    // If result is null, an API error occurred and apiError will be set by the hook
   };
 
   return (
     <AuthCard title="Sign in to your account">
-      <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+      <AuthForm onSubmit={handleSubmit}>
         <Input
           label="Username"
           id="username"
           name="username"
-          type="username"
+          type="text"
           autoComplete="username"
           required
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           placeholder="Username"
+          disabled={isLoading}
         />
         <Input
           label="Password"
@@ -93,14 +80,15 @@ function Login() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
+          disabled={isLoading}
         />
 
-        <ErrorAlert message={error} />
+        <ErrorAlert message={apiError} />
 
         <div className="flex items-center justify-between">
           <div className="text-sm">
             <Link
-              to="/forgotPassword"
+              to="/forgot-password"
               className="font-medium text-indigo-400 hover:text-indigo-300"
             >
               Forgot your password?
@@ -109,18 +97,16 @@ function Login() {
         </div>
 
         <div>
-          <Button type="submit">Sign in</Button>
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? 'Signing in...' : 'Sign in'}
+          </Button>
         </div>
-      </form>
-      <p className="mt-6 text-center text-sm text-gray-400">
-        Don't have an account?{' '}
-        <Link
-          to="/register"
-          className="font-medium text-indigo-400 hover:text-indigo-300"
-        >
-          Sign up
-        </Link>
-      </p>
+      </AuthForm>
+      <AuthRedirectLink
+        text="Don't have an account?"
+        linkText="Sign up"
+        to="/register"
+      />
     </AuthCard>
   );
 }
