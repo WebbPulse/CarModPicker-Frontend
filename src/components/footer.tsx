@@ -9,7 +9,7 @@ function Footer() {
           <a href="/about" className="hover:text-gray-300">
             About Us
           </a>
-          <a href="/contactUs" className="hover:text-gray-300">
+          <a href="/contact-us" className="hover:text-gray-300">
             Contact
           </a>
           <a href="/privacyPolicy" className="hover:text-gray-300">
