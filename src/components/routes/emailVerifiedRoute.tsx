@@ -1,0 +1,33 @@
+import React from 'react';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { useAuth } from '../../contexts/authContext';
+
+const EmailVerifiedRoute: React.FC = () => {
+  const { isAuthenticated, user, isLoading } = useAuth();
+  const location = useLocation();
+
+  if (isLoading) {
+    return <div className="text-center p-10">Loading authentication...</div>;
+  }
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  if (!user?.email_verified) {
+    return (
+      <Navigate
+        to="/verify-email"
+        state={{
+          from: location,
+          message: 'Please verify your email to access this page.',
+        }}
+        replace
+      />
+    );
+  }
+
+  return <Outlet />;
+};
+
+export default EmailVerifiedRoute;

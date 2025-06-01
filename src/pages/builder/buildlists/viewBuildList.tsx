@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams } from 'react-router-dom';
 
 function ViewBuildList() {
   const { buildListId } = useParams(); // buildListId will contain the UUID from the URL
