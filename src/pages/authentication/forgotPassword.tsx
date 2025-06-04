@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Input from '../../components/input';
-import Button from '../../components/button';
+import ButtonStretch from '../../components/buttons/buttonStretch';
 import apiClient from '../../services/api';
 import AuthCard from '../../components/auth/authCard';
 import { ErrorAlert, ConfirmationAlert } from '../../components/alerts';
@@ -65,9 +65,9 @@ function ForgotPassword() {
             />
             <ErrorAlert message={apiError} />
             <div>
-              <Button type="submit" disabled={isLoading}>
+              <ButtonStretch type="submit" disabled={isLoading}>
                 {isLoading ? 'Sending...' : 'Send Password Reset Link'}
-              </Button>
+              </ButtonStretch>
             </div>
           </AuthForm>
           <AuthRedirectLink

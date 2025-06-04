@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Input from '../../components/input';
-import Button from '../../components/button';
+import ButtonStretch from '../../components/buttons/buttonStretch';
 import apiClient from '../../services/api';
 import type { UserRead } from '../../types/api'; // Keep UserRead if needed for response type
 import AuthCard from '../../components/auth/authCard';
@@ -97,9 +97,9 @@ function Login() {
         </div>
 
         <div>
-          <Button type="submit" disabled={isLoading}>
+          <ButtonStretch type="submit" disabled={isLoading}>
             {isLoading ? 'Signing in...' : 'Sign in'}
-          </Button>
+          </ButtonStretch>
         </div>
       </AuthForm>
       <AuthRedirectLink

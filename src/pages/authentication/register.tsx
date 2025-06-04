@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Input from '../../components/input';
-import Button from '../../components/button';
+import ButtonStretch from '../../components/buttons/buttonStretch';
 import apiClient from '../../services/api';
 import type { UserCreate, UserRead } from '../../types/api';
 import AuthCard from '../../components/auth/authCard';
@@ -110,9 +110,9 @@ function Register() {
         <ErrorAlert message={apiError} />
 
         <div>
-          <Button type="submit" disabled={isLoading}>
+          <ButtonStretch type="submit" disabled={isLoading}>
             {isLoading ? 'Signing up...' : 'Sign up'}
-          </Button>
+          </ButtonStretch>
         </div>
       </AuthForm>
       <AuthRedirectLink

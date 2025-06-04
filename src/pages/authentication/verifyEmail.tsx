@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import AuthCard from '../../components/auth/authCard';
 import { ErrorAlert, ConfirmationAlert } from '../../components/alerts';
-import Button from '../../components/button';
+import ButtonStretch from '../../components/buttons/buttonStretch';
 import apiClient from '../../services/api';
 import AuthRedirectLink from '../../components/auth/authRedirectLink';
 import useApiRequest from '../../hooks/useApiRequest';
 import { useAuth } from '../../contexts/authContext'; // Import useAuth
+import LoadingSpinner from '../../components/loadingSpinner'; // Add this import
 
 function VerifyEmail() {
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -40,7 +41,7 @@ function VerifyEmail() {
   if (authIsLoading) {
     return (
       <AuthCard title="Verify Your Email">
-        <div>Loading user information...</div>
+        <LoadingSpinner />
       </AuthCard>
     );
   }
@@ -75,9 +76,9 @@ function VerifyEmail() {
         )}
         <ErrorAlert message={apiError} />
         {!isSubmitted && (
-          <Button onClick={handleSubmit} disabled={apiIsLoading}>
+          <ButtonStretch onClick={handleSubmit} disabled={apiIsLoading}>
             {apiIsLoading ? 'Sending...' : 'Send Verification Email'}
-          </Button>
+          </ButtonStretch>
         )}
         <AuthRedirectLink text="Back to" linkText="Home" to="/" />
       </div>

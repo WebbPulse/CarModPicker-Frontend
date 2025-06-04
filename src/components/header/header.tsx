@@ -1,13 +1,14 @@
 import { Link } from 'react-router-dom';
-import { useAuth } from '../contexts/authContext'; // Import useAuth
-import HeaderNavLink from './headerNavLink'; // Import the new component
+import { useAuth } from '../../contexts/authContext';
+import HeaderNavLink from './headerNavLink';
+import LoadingSpinner from '../loadingSpinner';
+import HeaderSeparator from './headerSeparator';
 import { BsTools } from 'react-icons/bs';
 import { GrDocumentText } from 'react-icons/gr';
 import { GiRaceCar } from 'react-icons/gi';
 
 function Header() {
-  const { isAuthenticated, logout, isLoading, user } = useAuth(); // Get auth state
-
+  const { isAuthenticated, logout, isLoading, user } = useAuth();
   return (
     <header className="bg-gray-950 text-white w-full">
       {/* Top Tier */}
@@ -15,10 +16,11 @@ function Header() {
         <Link to="/" className="text-xl font-bold">
           CarModPicker
         </Link>
-        <ul className="flex space-x-4 items-center">
+        <ul className="flex items-center">
+          {' '}
           {isLoading ? (
             <li>
-              <span className="text-sm text-gray-400">Loading...</span>
+              <LoadingSpinner />
             </li>
           ) : isAuthenticated ? (
             <>
@@ -27,10 +29,11 @@ function Header() {
                   Profile ({user?.username})
                 </HeaderNavLink>
               </li>
+              <HeaderSeparator />
               <li>
                 <button
                   onClick={logout}
-                  className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium bg-transparent border-none"
+                  className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 text-sm font-medium bg-transparent border-none"
                 >
                   Logout
                 </button>
@@ -41,6 +44,7 @@ function Header() {
               <li>
                 <HeaderNavLink to="/login">Login</HeaderNavLink>
               </li>
+              <HeaderSeparator />
               <li>
                 <HeaderNavLink to="/register">Register</HeaderNavLink>
               </li>
@@ -50,25 +54,28 @@ function Header() {
       </div>
 
       {/* Bottom Tier - Navigation */}
-      <nav className="bg-gray-950 border-t border-b border-gray-500">
-        <div className="container mx-auto flex items-center p-2">
+      <nav className="bg-gray-950 border-t border-b border-gray-500 w-full">
+        <div className="container mx-auto flex">
           <ul className="flex">
-            {' '}
+            <HeaderSeparator />
             <li>
               <HeaderNavLink to="/builder" icon={<BsTools />}>
                 Builder
               </HeaderNavLink>
             </li>
+            <HeaderSeparator />
             <li>
               <HeaderNavLink to="/guides" icon={<GrDocumentText />}>
                 Guides
               </HeaderNavLink>
             </li>
+            <HeaderSeparator />
             <li>
-              <HeaderNavLink to="/completed-builds" icon={<GiRaceCar />}>
-                Completed Builds
+              <HeaderNavLink to="/builder/my-buildlists" icon={<GiRaceCar />}>
+                My Builds
               </HeaderNavLink>
             </li>
+            <HeaderSeparator />
           </ul>
         </div>
       </nav>

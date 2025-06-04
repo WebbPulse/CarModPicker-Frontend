@@ -1,6 +1,7 @@
 import React from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/authContext';
+import LoadingSpinner from '../loadingSpinner';
 
 const ProtectedRoute: React.FC = () => {
   const { isAuthenticated, isLoading } = useAuth();
@@ -8,7 +9,7 @@ const ProtectedRoute: React.FC = () => {
 
   if (isLoading) {
     // Optional: Show a global loading spinner or a placeholder
-    return <div className="text-center p-10">Loading authentication...</div>;
+    return <LoadingSpinner />;
   }
 
   if (!isAuthenticated) {
