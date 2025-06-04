@@ -1,10 +1,14 @@
 import React from 'react';
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonStretchProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
 }
 
-const Button: React.FC<ButtonProps> = ({ children, ...props }) => {
+const ButtonStretch: React.FC<ButtonStretchProps> = ({
+  children,
+  ...props
+}) => {
   return (
     <button
       {...props}
@@ -15,4 +19,4 @@ const Button: React.FC<ButtonProps> = ({ children, ...props }) => {
   );
 };
 
-export default Button;
+export default ButtonStretch;

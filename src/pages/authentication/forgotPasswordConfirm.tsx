@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Input from '../../components/input';
-import Button from '../../components/button';
+import ButtonStretch from '../../components/buttons/buttonStretch';
 import apiClient from '../../services/api';
 import AuthCard from '../../components/auth/authCard';
 import { ErrorAlert, ConfirmationAlert } from '../../components/alerts';
@@ -121,9 +121,9 @@ function ForgotPasswordConfirm() {
             />
             <ErrorAlert message={apiError} />
             <div>
-              <Button type="submit" disabled={isLoading}>
+              <ButtonStretch type="submit" disabled={isLoading}>
                 {isLoading ? 'Setting Password...' : 'Set New Password'}
-              </Button>
+              </ButtonStretch>
             </div>
           </AuthForm>
           <AuthRedirectLink
