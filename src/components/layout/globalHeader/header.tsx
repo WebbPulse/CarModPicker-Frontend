@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { useAuth } from '../../contexts/authContext';
+import { useAuth } from '../../../contexts/authContext';
 import HeaderNavLink from './headerNavLink';
 import LoadingSpinner from '../loadingSpinner';
 import HeaderSeparator from './headerSeparator';

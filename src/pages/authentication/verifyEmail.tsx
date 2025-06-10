@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import AuthCard from '../../components/auth/authCard';
-import { ErrorAlert, ConfirmationAlert } from '../../components/alerts';
+import { ErrorAlert, ConfirmationAlert } from '../../components/layout/alerts';
 import ButtonStretch from '../../components/buttons/buttonStretch';
 import apiClient from '../../services/api';
 import AuthRedirectLink from '../../components/auth/authRedirectLink';
 import useApiRequest from '../../hooks/useApiRequest';
 import { useAuth } from '../../contexts/authContext'; // Import useAuth
-import LoadingSpinner from '../../components/loadingSpinner'; // Add this import
+import LoadingSpinner from '../../components/layout/loadingSpinner'; // Add this import
 
 function VerifyEmail() {
   const [isSubmitted, setIsSubmitted] = useState(false);

@@ -18,8 +18,8 @@ import About from './pages/about.tsx';
 import PrivacyPolicy from './pages/privacyPolicy.tsx';
 import ContactUs from './pages/contactUs.tsx';
 
-import Header from './components/header/header.tsx';
-import Footer from './components/footer/footer.tsx';
+import Header from './components/layout/globalHeader/header.tsx';
+import Footer from './components/layout/globalFooter/footer.tsx';
 import ProtectedRoute from './components/routes/protectedRoute';
 import EmailVerifiedRoute from './components/routes/emailVerifiedRoute.tsx';
 import GuestRoute from './components/routes/guestRoute';

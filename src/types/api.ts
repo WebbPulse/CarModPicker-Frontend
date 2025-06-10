@@ -26,7 +26,8 @@ export interface UserUpdate {
   username?: string | null;
   email?: string | null;
   disabled?: boolean | null;
-  password?: string | null;
+  password?: string | null; // For the new password
+  current_password: string; // Current password is required for any update
 }
 
 export interface CarCreate {
