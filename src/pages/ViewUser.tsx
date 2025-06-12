@@ -107,16 +107,10 @@ function ViewUser() {
       <Divider />
 
       <CarList
-        cars={userCars}
-        isLoading={isLoadingUserCars}
-        error={
-          userCarsError ||
-          (userCars === null && !isLoadingUserCars && !userId
-            ? 'Could not determine user to fetch cars for.'
-            : null)
-        }
-        title={`${user.username}'s Cars`}
-        emptyMessage={`${user.username} has not made any cars public or has no cars.`}
+        userId={user.id}
+        refreshKey={userCars} // Use userCars to trigger re-fetching if needed
+        title="Their Cars"
+        emptyMessage="This user hasn't added any cars yet."
       />
     </div>
   );

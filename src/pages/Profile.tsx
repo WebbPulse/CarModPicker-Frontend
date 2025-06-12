@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -6,7 +6,7 @@ import PageHeader from '../components/layout/PageHeader';
 import { ConfirmationAlert, ErrorAlert } from '../components/Alerts';
 import apiClient from '../services/Api';
 import useApiRequest from '../hooks/UseApiRequest';
-import type { UserUpdate, UserRead } from '../types/Api';
+import type { UserUpdate, UserRead, CarRead } from '../types/Api';
 import Input from '../components/Input';
 import ButtonStretch from '../components/buttons/StretchButton';
 import Card from '../components/Card';
@@ -17,8 +17,7 @@ import AuthRedirectLink from '../components/auth/AuthRedirectLink';
 import ActionButton from '../components/buttons/ActionButton';
 import SecondaryButton from '../components/buttons/SecondaryButton';
 import Divider from '../components/layout/Divider';
-import CarList from '../components/cars/CarList'; // Added import
-import type { CarRead } from '../types/Api'; // Added import
+import CarList from '../components/cars/CarList';
 
 function Profile() {
   const {
@@ -40,7 +39,6 @@ function Profile() {
     type: 'success' | 'error' | 'info';
     message: string;
   } | null>(null);
-  const [myCars, setMyCars] = useState<CarRead[]>([]); // Added state for cars
 
   useEffect(() => {
     if (user) {
@@ -63,30 +61,6 @@ function Profile() {
     executeRequest: executeUpdateUser,
     setError: setUpdateApiError,
   } = useApiRequest(updateUserRequestFn);
-
-  // --- Fetch user's cars ---
-  const fetchMyCarsRequestFn = () => apiClient.get<CarRead[]>('/cars/');
-
-  const {
-    data: fetchedCarsData,
-    isLoading: isLoadingCars,
-    error: carsError,
-    executeRequest: fetchMyCars,
-  } = useApiRequest(fetchMyCarsRequestFn);
-
-  useEffect(() => {
-    if (user && !isEditing) {
-      // Fetch cars only if user exists and not in editing mode
-      fetchMyCars(undefined);
-    }
-  }, [user, fetchMyCars, isEditing]);
-
-  useEffect(() => {
-    if (fetchedCarsData) {
-      setMyCars(fetchedCarsData);
-    }
-  }, [fetchedCarsData]);
-  // --- End fetch user's cars ---
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -368,13 +342,12 @@ function Profile() {
 
       {/* Display User's Cars */}
       <CarList
-        cars={myCars}
-        isLoading={isLoadingCars}
-        error={carsError}
+        userId={user && !isEditing ? user.id : undefined}
         title="Your Cars"
         emptyMessage="You haven't added any cars yet. Go to the Builder to add your first car!"
       />
     </div>
   );
 }
+
 export default Profile;

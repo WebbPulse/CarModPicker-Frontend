@@ -7,33 +7,15 @@ import LoadingSpinner from '../../components/LoadingSpinner';
 import CarList from '../../components/cars/CarList';
 import CreateCarForm from '../../components/cars/CreateCarForm';
 import Divider from '../../components/layout/Divider';
-
-const fetchMyCarsRequestFn = () => apiClient.get<CarRead[]>('/cars/');
+import { useAuth } from '../../contexts/AuthContext';
 
 function Builder() {
-  const [myCars, setMyCars] = useState<CarRead[]>([]);
-
-  const {
-    data: fetchedCarsData,
-    isLoading: isLoadingCars,
-    error: carsError,
-    executeRequest: fetchMyCars,
-  } = useApiRequest(fetchMyCarsRequestFn);
-
-  useEffect(() => {
-    fetchMyCars(undefined); // No payload needed for GET
-  }, [fetchMyCars]);
-
-  useEffect(() => {
-    if (fetchedCarsData) {
-      setMyCars(fetchedCarsData);
-    }
-  }, [fetchedCarsData]);
+  const { user } = useAuth(); // Get the authenticated user
+  const [refreshTrigger, setRefreshTrigger] = useState(0); // Add state to trigger refresh
 
   const handleCarCreated = (newCar: CarRead) => {
-    setMyCars((prevCars) => [...prevCars, newCar]);
-    // Optionally, re-fetch all cars to ensure consistency if order matters or other side effects
-    // fetchMyCars(undefined);
+    // setMyCars((prevCars) => [...prevCars, newCar]); // Remove this
+    setRefreshTrigger((prev) => prev + 1); // Increment refreshTrigger to refetch cars in CarList
   };
 
   return (
@@ -47,11 +29,10 @@ function Builder() {
 
       <Divider />
 
-      {isLoadingCars && <LoadingSpinner />}
+      {/* {isLoadingCars && <LoadingSpinner />} Remove this, CarList handles its own loading */}
       <CarList
-        cars={myCars}
-        isLoading={false} // Loading is handled above for the whole section
-        error={carsError}
+        userId={user?.id}
+        refreshKey={refreshTrigger}
         title="Your Cars"
         emptyMessage="You haven't added any cars yet. Add one above to get started!"
       />
