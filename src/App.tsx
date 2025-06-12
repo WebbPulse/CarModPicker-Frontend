@@ -36,19 +36,16 @@ function App() {
             element={<div className="text-center">Page Not Found</div>}
           />
           <Route path="/" element={<Home />} />
-
           {/* Guest Routes (redirect if logged in) */}
           <Route element={<GuestRoute />}>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
           </Route>
-
           <Route path="/about" element={<About />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/contact-us" element={<ContactUs />} />
-          <Route path="/user/:username" element={<ViewUser />} />
-
+          <Route path="/user/:userId" element={<ViewUser />} />{' '}
           <Route
             path="/verify-email/confirm"
             element={<VerifyEmailConfirm />}

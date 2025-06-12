@@ -1,15 +1,11 @@
 import React from 'react';
 import { Link, type LinkProps } from 'react-router-dom';
 
-interface ButtonFixedSizeProps extends Omit<LinkProps, 'className'> {
+interface LinkButtonProps extends Omit<LinkProps, 'className'> {
   children: React.ReactNode;
 }
 
-const ButtonFixedSize: React.FC<ButtonFixedSizeProps> = ({
-  children,
-  to,
-  ...props
-}) => {
+const LinkButton: React.FC<LinkButtonProps> = ({ children, to, ...props }) => {
   return (
     <Link
       to={to}
@@ -21,4 +17,4 @@ const ButtonFixedSize: React.FC<ButtonFixedSizeProps> = ({
   );
 };
 
-export default ButtonFixedSize;
+export default LinkButton;

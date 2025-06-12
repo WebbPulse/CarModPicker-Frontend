@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/authContext';
-import LoadingSpinner from '../components/layout/loadingSpinner';
+import LoadingSpinner from '../components/loadingSpinner';
 import PageHeader from '../components/layout/pageHeader';
-import { ConfirmationAlert, ErrorAlert } from '../components/layout/alerts';
+import { ConfirmationAlert, ErrorAlert } from '../components/alerts';
 import apiClient from '../services/api';
 import useApiRequest from '../hooks/useApiRequest';
 import type { UserUpdate, UserRead } from '../types/api';
-import Input from '../components/layout/input';
-import ButtonStretch from '../components/buttons/buttonStretch';
-import Card from '../components/layout/card';
+import Input from '../components/input';
+import ButtonStretch from '../components/buttons/stretchButton';
+import Card from '../components/card';
 import SectionHeader from '../components/layout/sectionHeader';
 import ProfileInfoItem from '../components/profile/profileInfoItem';
 import AuthCard from '../components/auth/authCard';
 import AuthRedirectLink from '../components/auth/authRedirectLink';
+import ActionButton from '../components/buttons/actionButton';
+import SecondaryButton from '../components/buttons/secondaryButton';
+import Divider from '../components/layout/divider';
 
 function Profile() {
   const {
@@ -189,7 +192,7 @@ function Profile() {
   return (
     <div>
       <PageHeader
-        title="Profile Page"
+        title="Profile"
         subtitle={`Manage your account details, ${user.username}.`}
       />
       <Card>
@@ -242,12 +245,9 @@ function Profile() {
                 <p>{user.disabled ? 'Disabled' : 'Active'}</p>
               </ProfileInfoItem>
             </div>
-            <button
-              onClick={handleEditToggle}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm font-medium mr-2"
-            >
+            <ActionButton onClick={handleEditToggle} className="mr-2">
               Edit Profile
-            </button>
+            </ActionButton>
           </>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-6 mb-6">
@@ -293,7 +293,7 @@ function Profile() {
               disabled={isUpdating}
               autoComplete="new-password"
             />
-            <hr className="border-gray-600 my-4" />
+            <Divider />
             <Input
               label="Current Password (required to save any changes)"
               id="currentPassword"
@@ -309,37 +309,35 @@ function Profile() {
               <ButtonStretch type="submit" disabled={isUpdating}>
                 {isUpdating ? 'Saving...' : 'Save Changes'}
               </ButtonStretch>
-              <button
+              <SecondaryButton
                 type="button"
                 onClick={handleEditToggle}
                 disabled={isUpdating}
-                className="w-full flex justify-center py-2 px-4 border border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-300 bg-gray-700 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:ring-offset-gray-800"
+                className="w-full"
               >
                 Cancel
-              </button>
+              </SecondaryButton>
             </div>
           </form>
         )}
 
-        <div className="mt-6 border-t border-gray-700 pt-6">
-          <button
-            onClick={async () => {
-              setStatusMessage(null);
-              setUpdateApiError(null);
-              await checkAuthStatus();
-              setStatusMessage({
-                type: 'success',
-                message: 'Profile data refreshed.',
-              });
-            }}
-            disabled={authIsLoading || isUpdating}
-            className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-sm font-medium"
-          >
-            {authIsLoading || isUpdating
-              ? 'Refreshing...'
-              : 'Refresh Profile Data'}
-          </button>
-        </div>
+        <Divider />
+        <ActionButton
+          onClick={async () => {
+            setStatusMessage(null);
+            setUpdateApiError(null);
+            await checkAuthStatus();
+            setStatusMessage({
+              type: 'success',
+              message: 'Profile data refreshed.',
+            });
+          }}
+          disabled={authIsLoading || isUpdating}
+        >
+          {authIsLoading || isUpdating
+            ? 'Refreshing...'
+            : 'Refresh Profile Data'}
+        </ActionButton>
       </Card>
     </div>
   );

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../../contexts/authContext';
 import HeaderNavLink from './headerNavLink';
-import LoadingSpinner from '../loadingSpinner';
+import LoadingSpinner from '../../loadingSpinner';
 import HeaderSeparator from './headerSeparator';
 import { BsTools } from 'react-icons/bs';
 import { GrDocumentText } from 'react-icons/gr';

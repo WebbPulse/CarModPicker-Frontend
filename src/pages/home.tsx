@@ -1,5 +1,5 @@
 import { useAuth } from '../contexts/authContext';
-import ButtonFixedSize from '../components/buttons/buttonFixedSize';
+import LinkButton from '../components/buttons/linkButton';
 
 export default function HomePage() {
   const { user, isAuthenticated } = useAuth();
@@ -14,7 +14,7 @@ export default function HomePage() {
             Explore and manage your car modifications with ease.
           </p>
           <div className="mt-8">
-            <ButtonFixedSize to="/builder">Start Your Build</ButtonFixedSize>
+            <LinkButton to="/builder">Start Your Build</LinkButton>
           </div>
         </>
       ) : (
@@ -24,9 +24,7 @@ export default function HomePage() {
             modifications.
           </p>
           <div className="mt-8">
-            <ButtonFixedSize to="/login">
-              Login to Start Your Build
-            </ButtonFixedSize>
+            <LinkButton to="/login">Login to Start Your Build</LinkButton>
           </div>
           <p className="text-lg mt-6">
             Please{' '}
