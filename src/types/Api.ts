@@ -14,6 +14,7 @@ export interface UserRead {
   email: string;
   disabled: boolean;
   email_verified: boolean;
+  image_url?: string | null;
 }
 
 export interface UserCreate {
@@ -26,8 +27,9 @@ export interface UserUpdate {
   username?: string | null;
   email?: string | null;
   disabled?: boolean | null;
-  password?: string | null; // For the new password
-  current_password: string; // Current password is required for any update
+  password?: string | null;
+  image_url?: string | null;
+  current_password: string;
 }
 
 export interface CarCreate {
@@ -36,6 +38,7 @@ export interface CarCreate {
   year: number;
   trim?: string | null;
   vin?: string | null;
+  image_url?: string | null;
 }
 
 export interface CarRead {
@@ -45,6 +48,7 @@ export interface CarRead {
   year: number;
   trim?: string | null;
   vin?: string | null;
+  image_url?: string | null;
   user_id: number;
 }
 
@@ -54,12 +58,14 @@ export interface CarUpdate {
   year?: number | null;
   trim?: string | null;
   vin?: string | null;
+  image_url?: string | null;
 }
 
 export interface BuildListCreate {
   name: string;
   description?: string | null;
   car_id: number;
+  image_url?: string | null;
 }
 
 export interface BuildListRead {
@@ -67,12 +73,14 @@ export interface BuildListRead {
   name: string;
   description?: string | null;
   car_id: number;
+  image_url?: string | null;
 }
 
 export interface BuildListUpdate {
   name?: string | null;
   description?: string | null;
   car_id?: number | null;
+  image_url?: string | null;
 }
 
 export interface PartCreate {
@@ -82,6 +90,7 @@ export interface PartCreate {
   manufacturer?: string | null;
   description?: string | null;
   price?: number | null;
+  image_url?: string | null;
   build_list_id: number;
 }
 
@@ -93,6 +102,7 @@ export interface PartRead {
   manufacturer?: string | null;
   description?: string | null;
   price?: number | null;
+  image_url?: string | null;
   build_list_id: number;
 }
 
@@ -103,6 +113,7 @@ export interface PartUpdate {
   manufacturer?: string | null;
   description?: string | null;
   price?: number | null;
+  image_url?: string | null;
   build_list_id?: number | null;
 }
 

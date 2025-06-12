@@ -84,6 +84,19 @@ function ViewUser() {
       <Card>
         <SectionHeader title="Public Profile Information" />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-300 mb-6">
+          <ProfileInfoItem label="Profile Picture">
+            {user.image_url ? (
+              <img
+                src={user.image_url}
+                alt={`${user.username}'s profile`}
+                className="h-48 w-48 object-cover"
+              />
+            ) : (
+              <p className="text-gray-400">No image set.</p>
+            )}
+          </ProfileInfoItem>
+          {/* This div creates an empty cell in the top-right on medium screens and up */}
+          <div className="hidden md:block"></div>
           <ProfileInfoItem label="Username">
             <p>{user.username}</p>
           </ProfileInfoItem>
@@ -108,7 +121,7 @@ function ViewUser() {
 
       <CarList
         userId={user.id}
-        refreshKey={userCars} // Use userCars to trigger re-fetching if needed
+        refreshKey={userCars ? userCars.length : undefined} // Use userCars.length as refreshKey
         title="Their Cars"
         emptyMessage="This user hasn't added any cars yet."
       />

@@ -3,15 +3,18 @@ import type { CarRead } from '../../types/Api';
 import CarListItem from './CarListItem';
 import SectionHeader from '../layout/SectionHeader';
 import { ErrorAlert } from '../Alerts';
-import apiClient from '../../services/Api'; // Import apiClient
-import useApiRequest from '../../hooks/UseApiRequest'; // Import useApiRequest
-import LoadingSpinner from '../LoadingSpinner'; // Import LoadingSpinner
+import apiClient from '../../services/Api';
+import useApiRequest from '../../hooks/UseApiRequest';
+import LoadingSpinner from '../LoadingSpinner';
+import Card from '../Card'; // Import Card for the "Add Car" tile
 
 interface CarListProps {
-  userId?: number; // User ID to fetch cars for
-  refreshKey?: number; // Optional key to trigger a refetch
+  userId?: number;
+  refreshKey?: number;
   title?: string;
   emptyMessage?: string;
+  onAddCarClick?: () => void; // Callback to open the dialog
+  showAddCarTile?: boolean; // To control visibility of the "Add Car" tile
 }
 
 const CarList: React.FC<CarListProps> = ({
@@ -19,6 +22,8 @@ const CarList: React.FC<CarListProps> = ({
   refreshKey,
   title = 'Cars',
   emptyMessage = 'No cars found.',
+  onAddCarClick,
+  showAddCarTile = false,
 }) => {
   const [internalCars, setInternalCars] = useState<CarRead[] | null>(null);
 
@@ -54,7 +59,12 @@ const CarList: React.FC<CarListProps> = ({
   }, [fetchedApiCars, isLoading, userId, error]);
 
   if (isLoading) {
-    return <LoadingSpinner />;
+    return (
+      <>
+        <SectionHeader title={title} />
+        <LoadingSpinner />
+      </>
+    );
   }
 
   // If a userId was provided, but an error occurred during fetch
@@ -67,24 +77,37 @@ const CarList: React.FC<CarListProps> = ({
     );
   }
 
-  // If no userId is provided (e.g. user not logged in)
-  // OR if userId is provided, no error, not loading, but no cars
-  if (!userId || (!isLoading && (!internalCars || internalCars.length === 0))) {
-    return (
-      <div>
-        <SectionHeader title={title} />
-        <p className="text-gray-400">{emptyMessage}</p>
-      </div>
-    );
-  }
+  const noCarsToShow = !internalCars || internalCars.length === 0;
 
-  // If we have cars (internalCars should be an array here, possibly empty handled above)
   return (
     <div>
       <SectionHeader title={title} />
-      {internalCars!.map((car) => (
-        <CarListItem key={car.id} car={car} />
-      ))}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-4">
+        {showAddCarTile && onAddCarClick && (
+          <Card
+            onClick={onAddCarClick}
+            className="cursor-pointer hover:bg-gray-800 flex flex-col items-center justify-center text-center p-6 h-full min-h-[200px] border-2 border-dashed border-gray-700 hover:border-indigo-500 transition-colors"
+          >
+            <h3 className="text-xl font-semibold text-indigo-400 mb-2">
+              Add a New Car
+            </h3>
+            <p className="text-gray-400 text-sm">
+              Click here to add a vehicle to your garage.
+            </p>
+            {/* You could add an icon here e.g., <PlusIcon className="w-12 h-12 text-gray-500 mt-2" /> */}
+          </Card>
+        )}
+        {internalCars &&
+          internalCars.map((car) => <CarListItem key={car.id} car={car} />)}
+      </div>
+      {noCarsToShow && !showAddCarTile && (
+        <p className="text-gray-400 mt-4">{emptyMessage}</p>
+      )}
+      {noCarsToShow && showAddCarTile && (
+        <p className="text-gray-400 mt-4">
+          You have no cars yet. Click the tile above to add your first one!
+        </p>
+      )}
     </div>
   );
 };

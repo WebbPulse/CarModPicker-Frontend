@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -6,7 +6,7 @@ import PageHeader from '../components/layout/PageHeader';
 import { ConfirmationAlert, ErrorAlert } from '../components/Alerts';
 import apiClient from '../services/Api';
 import useApiRequest from '../hooks/UseApiRequest';
-import type { UserUpdate, UserRead, CarRead } from '../types/Api';
+import type { UserUpdate, UserRead } from '../types/Api';
 import Input from '../components/Input';
 import ButtonStretch from '../components/buttons/StretchButton';
 import Card from '../components/Card';
@@ -34,6 +34,7 @@ function Profile() {
     currentPassword: '',
     newPassword: '',
     confirmNewPassword: '',
+    image_url: '', // Add image_url to formData
   });
   const [statusMessage, setStatusMessage] = useState<{
     type: 'success' | 'error' | 'info';
@@ -48,6 +49,7 @@ function Profile() {
         currentPassword: '',
         newPassword: '',
         confirmNewPassword: '',
+        image_url: user.image_url || '', // Initialize image_url
       });
     }
   }, [user]);
@@ -80,6 +82,7 @@ function Profile() {
         currentPassword: '',
         newPassword: '',
         confirmNewPassword: '',
+        image_url: user.image_url || '', // Reset image_url on edit toggle
       });
     }
   };
@@ -129,6 +132,12 @@ function Profile() {
     } else if (formData.email === '' && user.email !== '') {
       setUpdateApiError('Email cannot be empty.');
       return;
+    }
+
+    // Image URL
+    if (formData.image_url.trim() !== (user.image_url || '')) {
+      payload.image_url = formData.image_url.trim() || null; // Set to null if empty
+      hasChanges = true;
     }
 
     // New Password
@@ -218,6 +227,19 @@ function Profile() {
         {!isEditing ? (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-300 mb-6">
+              <ProfileInfoItem label="Profile Picture">
+                {user.image_url ? (
+                  <img
+                    src={user.image_url}
+                    alt={`${user.username}'s profile`}
+                    className="h-48 w-48 object-cover"
+                  />
+                ) : (
+                  <p className="text-gray-400">No image set.</p>
+                )}
+              </ProfileInfoItem>
+
+              <div className="hidden md:block"></div>
               <ProfileInfoItem label="Username">
                 <p>{user.username}</p>
               </ProfileInfoItem>
@@ -270,6 +292,17 @@ function Profile() {
               disabled={isUpdating}
               required
               autoComplete="email"
+            />
+            <Input
+              label="Profile Image URL (Optional)"
+              id="image_url"
+              name="image_url"
+              type="url"
+              value={formData.image_url}
+              onChange={handleInputChange}
+              disabled={isUpdating}
+              placeholder="https://example.com/your-image.png"
+              autoComplete="photo"
             />
             <Input
               label="New Password (leave blank to keep current)"

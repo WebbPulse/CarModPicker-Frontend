@@ -21,6 +21,7 @@ const CreateCarForm: React.FC<CreateCarFormProps> = ({ onCarCreated }) => {
   const [year, setYear] = useState<number | ''>('');
   const [trim, setTrim] = useState('');
   const [vin, setVin] = useState('');
+  const [imageUrl, setImageUrl] = useState(''); // Add state for image URL
   const [formMessage, setFormMessage] = useState<{
     type: 'success' | 'error';
     text: string;
@@ -46,7 +47,7 @@ const CreateCarForm: React.FC<CreateCarFormProps> = ({ onCarCreated }) => {
       return;
     }
     if (
-      year !== '' &&
+      year !== null &&
       (isNaN(Number(year)) ||
         Number(year) < 1886 ||
         Number(year) > new Date().getFullYear() + 1)
@@ -61,6 +62,7 @@ const CreateCarForm: React.FC<CreateCarFormProps> = ({ onCarCreated }) => {
       year: Number(year),
       trim: trim.trim() || null,
       vin: vin.trim() || null,
+      image_url: imageUrl.trim() || null, // Add image_url to payload
     };
 
     const result = await executeCreateCar(payload);
@@ -74,6 +76,7 @@ const CreateCarForm: React.FC<CreateCarFormProps> = ({ onCarCreated }) => {
       setYear('');
       setTrim('');
       setVin('');
+      setImageUrl(''); // Reset image URL
     } else {
       // apiError will be set by the hook
       // setFormMessage({ type: 'error', text: apiError || 'Failed to create car.' });
@@ -133,6 +136,16 @@ const CreateCarForm: React.FC<CreateCarFormProps> = ({ onCarCreated }) => {
           value={vin}
           onChange={(e) => setVin(e.target.value)}
           disabled={isLoading}
+        />
+        <Input
+          label="Image URL (Optional)"
+          id="image_url"
+          name="image_url"
+          type="url"
+          value={imageUrl}
+          onChange={(e) => setImageUrl(e.target.value)}
+          disabled={isLoading}
+          placeholder="https://example.com/car-image.png"
         />
         {formMessage?.type === 'success' && (
           <ConfirmationAlert message={formMessage.text} />
