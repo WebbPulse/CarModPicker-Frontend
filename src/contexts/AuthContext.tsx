@@ -1,9 +1,9 @@
-// filepath: src/contexts/authContext.tsx
+// filepath: src/contexts/AuthContext.tsx
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
-import apiClient from '../services/api';
-import type { UserRead } from '../types/api';
+import apiClient from '../services/Api';
+import type { UserRead } from '../types/Api';
 
 interface AuthContextType {
   isAuthenticated: boolean;

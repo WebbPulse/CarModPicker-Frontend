@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import AuthCard from '../../components/auth/authCard';
-import { ErrorAlert, ConfirmationAlert } from '../../components/alerts';
-import AuthRedirectLink from '../../components/auth/authRedirectLink';
+import AuthCard from '../../components/auth/AuthCard';
+import { ErrorAlert, ConfirmationAlert } from '../../components/Alerts';
+import AuthRedirectLink from '../../components/auth/AuthRedirectLink';
 
 function VerifyEmailConfirm() {
   const [searchParams] = useSearchParams();

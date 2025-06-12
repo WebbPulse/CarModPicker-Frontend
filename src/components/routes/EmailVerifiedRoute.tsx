@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { useAuth } from '../../contexts/authContext';
-import LoadingSpinner from '../loadingSpinner';
+import { useAuth } from '../../contexts/AuthContext';
+import LoadingSpinner from '../LoadingSpinner';
 
 const EmailVerifiedRoute: React.FC = () => {
   const { isAuthenticated, user, isLoading } = useAuth();

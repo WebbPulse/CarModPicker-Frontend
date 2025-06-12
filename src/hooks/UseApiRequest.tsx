@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { AxiosError, type AxiosResponse } from 'axios';
-import type { HTTPValidationError, ValidationError } from '../types/api';
+import type { HTTPValidationError, ValidationError } from '../types/Api';
 
 interface UseApiRequestReturn<TData, TPayload> {
   data: TData | null;

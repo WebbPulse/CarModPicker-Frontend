@@ -1,22 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../contexts/authContext';
-import LoadingSpinner from '../components/loadingSpinner';
-import PageHeader from '../components/layout/pageHeader';
-import { ConfirmationAlert, ErrorAlert } from '../components/alerts';
-import apiClient from '../services/api';
-import useApiRequest from '../hooks/useApiRequest';
-import type { UserUpdate, UserRead } from '../types/api';
-import Input from '../components/input';
-import ButtonStretch from '../components/buttons/stretchButton';
-import Card from '../components/card';
-import SectionHeader from '../components/layout/sectionHeader';
-import ProfileInfoItem from '../components/profile/profileInfoItem';
-import AuthCard from '../components/auth/authCard';
-import AuthRedirectLink from '../components/auth/authRedirectLink';
-import ActionButton from '../components/buttons/actionButton';
-import SecondaryButton from '../components/buttons/secondaryButton';
-import Divider from '../components/layout/divider';
+import { useAuth } from '../contexts/AuthContext';
+import LoadingSpinner from '../components/LoadingSpinner';
+import PageHeader from '../components/layout/PageHeader';
+import { ConfirmationAlert, ErrorAlert } from '../components/Alerts';
+import apiClient from '../services/Api';
+import useApiRequest from '../hooks/UseApiRequest';
+import type { UserUpdate, UserRead } from '../types/Api';
+import Input from '../components/Input';
+import ButtonStretch from '../components/buttons/StretchButton';
+import Card from '../components/Card';
+import SectionHeader from '../components/layout/SectionHeader';
+import ProfileInfoItem from '../components/profile/ProfileInfoItem';
+import AuthCard from '../components/auth/AuthCard';
+import AuthRedirectLink from '../components/auth/AuthRedirectLink';
+import ActionButton from '../components/buttons/ActionButton';
+import SecondaryButton from '../components/buttons/SecondaryButton';
+import Divider from '../components/layout/Divider';
+import CarList from '../components/cars/CarList'; // Added import
+import type { CarRead } from '../types/Api'; // Added import
 
 function Profile() {
   const {
@@ -38,6 +40,7 @@ function Profile() {
     type: 'success' | 'error' | 'info';
     message: string;
   } | null>(null);
+  const [myCars, setMyCars] = useState<CarRead[]>([]); // Added state for cars
 
   useEffect(() => {
     if (user) {
@@ -61,6 +64,30 @@ function Profile() {
     setError: setUpdateApiError,
   } = useApiRequest(updateUserRequestFn);
 
+  // --- Fetch user's cars ---
+  const fetchMyCarsRequestFn = () => apiClient.get<CarRead[]>('/cars/');
+
+  const {
+    data: fetchedCarsData,
+    isLoading: isLoadingCars,
+    error: carsError,
+    executeRequest: fetchMyCars,
+  } = useApiRequest(fetchMyCarsRequestFn);
+
+  useEffect(() => {
+    if (user && !isEditing) {
+      // Fetch cars only if user exists and not in editing mode
+      fetchMyCars(undefined);
+    }
+  }, [user, fetchMyCars, isEditing]);
+
+  useEffect(() => {
+    if (fetchedCarsData) {
+      setMyCars(fetchedCarsData);
+    }
+  }, [fetchedCarsData]);
+  // --- End fetch user's cars ---
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -73,7 +100,6 @@ function Profile() {
     setUpdateApiError(null);
     setStatusMessage(null);
     if (user) {
-      // Reset form data to current user details and clear password fields
       setFormData({
         username: user.username,
         email: user.email,
@@ -155,9 +181,8 @@ function Profile() {
       setStatusMessage({
         type: 'info',
         message:
-          'No changes to username, email, or password were detected. ' +
-          'If you intended to save, please ensure your current password is correct. ' +
-          'Otherwise, modify the fields you wish to change.',
+          'No changes were detected in your profile information. ' +
+          'To save, please modify the fields you wish to change and provide your current password.',
       });
       return;
     }
@@ -165,7 +190,6 @@ function Profile() {
     const result = await executeUpdateUser({ userId: user.id, data: payload });
 
     if (result) {
-      // await checkAuthStatus(); // This will refresh the user context and trigger useEffect to reset formData
       authLogin(result); // Use the returned user data to update auth context
       setIsEditing(false);
       setStatusMessage({
@@ -339,6 +363,17 @@ function Profile() {
             : 'Refresh Profile Data'}
         </ActionButton>
       </Card>
+
+      <Divider />
+
+      {/* Display User's Cars */}
+      <CarList
+        cars={myCars}
+        isLoading={isLoadingCars}
+        error={carsError}
+        title="Your Cars"
+        emptyMessage="You haven't added any cars yet. Go to the Builder to add your first car!"
+      />
     </div>
   );
 }

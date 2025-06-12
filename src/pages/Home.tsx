@@ -1,5 +1,5 @@
-import { useAuth } from '../contexts/authContext';
-import LinkButton from '../components/buttons/linkButton';
+import { useAuth } from '../contexts/AuthContext';
+import LinkButton from '../components/buttons/LinkButton';
 
 export default function HomePage() {
   const { user, isAuthenticated } = useAuth();

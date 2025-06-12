@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import Input from '../../components/input';
-import ButtonStretch from '../../components/buttons/stretchButton';
-import apiClient from '../../services/api';
-import AuthCard from '../../components/auth/authCard';
-import { ErrorAlert, ConfirmationAlert } from '../../components/alerts';
-import AuthRedirectLink from '../../components/auth/authRedirectLink';
-import useApiRequest from '../../hooks/useApiRequest';
-import AuthForm from '../../components/auth/authForm';
+import Input from '../../components/Input';
+import ButtonStretch from '../../components/buttons/StretchButton';
+import apiClient from '../../services/Api';
+import AuthCard from '../../components/auth/AuthCard';
+import { ErrorAlert, ConfirmationAlert } from '../../components/Alerts';
+import AuthRedirectLink from '../../components/auth/AuthRedirectLink';
+import useApiRequest from '../../hooks/UseApiRequest';
+import AuthForm from '../../components/auth/AuthForm';
 
 function ForgotPassword() {
   const [email, setEmail] = useState('');

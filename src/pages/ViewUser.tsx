@@ -1,36 +1,51 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import apiClient from '../services/api';
-import useApiRequest from '../hooks/useApiRequest';
-import type { UserRead } from '../types/api';
-import PageHeader from '../components/layout/pageHeader';
-import Card from '../components/card';
-import SectionHeader from '../components/layout/sectionHeader';
-import ProfileInfoItem from '../components/profile/profileInfoItem';
-import LoadingSpinner from '../components/loadingSpinner';
-import { ErrorAlert } from '../components/alerts';
+import apiClient from '../services/Api';
+import useApiRequest from '../hooks/UseApiRequest';
+import type { UserRead, CarRead } from '../types/Api';
+import PageHeader from '../components/layout/PageHeader';
+import Card from '../components/Card';
+import SectionHeader from '../components/layout/SectionHeader';
+import ProfileInfoItem from '../components/profile/ProfileInfoItem';
+import LoadingSpinner from '../components/LoadingSpinner';
+import { ErrorAlert } from '../components/Alerts';
+import CarList from '../components/cars/CarList';
+import Divider from '../components/layout/Divider';
 
 const fetchUserRequestFn = (
   userId: string // userId will be a string from URL params
 ) => apiClient.get<UserRead>(`/users/${userId}`);
+
+// Assumed API endpoint to fetch cars for a specific user ID
+// This might need adjustment based on your actual backend API capabilities
+const fetchCarsByUserIdRequestFn = (userId: string) =>
+  apiClient.get<CarRead[]>(`/cars/?user_id=${userId}`); // Example: /api/cars/?user_id=123
 
 function ViewUser() {
   const { userId } = useParams<{ userId: string }>(); // Changed from username to userId
 
   const {
     data: user,
-    isLoading,
-    error: apiError,
+    isLoading: isLoadingUser,
+    error: userApiError,
     executeRequest: fetchUser,
   } = useApiRequest(fetchUserRequestFn);
+
+  const {
+    data: userCars,
+    isLoading: isLoadingUserCars,
+    error: userCarsError,
+    executeRequest: fetchUserCars,
+  } = useApiRequest(fetchCarsByUserIdRequestFn);
 
   useEffect(() => {
     if (userId) {
       fetchUser(userId);
+      fetchUserCars(userId); // Fetch cars for the viewed user
     }
-  }, [userId, fetchUser]); // Dependency array updated to userId
+  }, [userId, fetchUser, fetchUserCars]); // Dependency array updated to userId
 
-  if (isLoading) {
+  if (isLoadingUser || isLoadingUserCars) {
     return (
       <>
         <PageHeader title="User Profile" />
@@ -39,13 +54,13 @@ function ViewUser() {
     );
   }
 
-  if (apiError) {
+  if (userApiError) {
     return (
       <div>
         <PageHeader title="User Profile" />
         <Card>
           <ErrorAlert
-            message={`Failed to load profile for User ID "${userId}". ${apiError}`}
+            message={`Failed to load profile for User ID "${userId}". ${userApiError}`}
           />
         </Card>
       </div>
@@ -88,6 +103,21 @@ function ViewUser() {
           information is not displayed.
         </p>
       </Card>
+
+      <Divider />
+
+      <CarList
+        cars={userCars}
+        isLoading={isLoadingUserCars}
+        error={
+          userCarsError ||
+          (userCars === null && !isLoadingUserCars && !userId
+            ? 'Could not determine user to fetch cars for.'
+            : null)
+        }
+        title={`${user.username}'s Cars`}
+        emptyMessage={`${user.username} has not made any cars public or has no cars.`}
+      />
     </div>
   );
 }

@@ -1,8 +1,8 @@
 // filepath: src/components/routes/guestRoute.tsx
 import React from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { useAuth } from '../../contexts/authContext';
-import LoadingSpinner from '../loadingSpinner';
+import { useAuth } from '../../contexts/AuthContext';
+import LoadingSpinner from '../LoadingSpinner';
 const GuestRoute: React.FC = () => {
   const { isAuthenticated, isLoading } = useAuth();
   const location = useLocation();

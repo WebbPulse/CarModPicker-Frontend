@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Input from '../../components/input';
-import ButtonStretch from '../../components/buttons/stretchButton';
-import apiClient from '../../services/api';
-import type { UserRead } from '../../types/api'; // Keep UserRead if needed for response type
-import AuthCard from '../../components/auth/authCard';
-import { ErrorAlert } from '../../components/alerts';
-import { useAuth } from '../../contexts/authContext';
-import AuthRedirectLink from '../../components/auth/authRedirectLink';
-import useApiRequest from '../../hooks/useApiRequest';
-import AuthForm from '../../components/auth/authForm';
+import Input from '../../components/Input';
+import ButtonStretch from '../../components/buttons/StretchButton';
+import apiClient from '../../services/Api';
+import type { UserRead } from '../../types/Api'; // Keep UserRead if needed for response type
+import AuthCard from '../../components/auth/AuthCard';
+import { ErrorAlert } from '../../components/Alerts';
+import { useAuth } from '../../contexts/AuthContext';
+import AuthRedirectLink from '../../components/auth/AuthRedirectLink';
+import useApiRequest from '../../hooks/UseApiRequest';
+import AuthForm from '../../components/auth/AuthForm';
 
 function Login() {
   const [username, setUsername] = useState('');

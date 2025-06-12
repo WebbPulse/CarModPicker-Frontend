@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
-import { useAuth } from '../../../contexts/authContext';
-import HeaderNavLink from './headerNavLink';
-import LoadingSpinner from '../../loadingSpinner';
-import HeaderSeparator from './headerSeparator';
+import { useAuth } from '../../../contexts/AuthContext';
+import HeaderNavLink from './HeaderNavLink';
+import LoadingSpinner from '../../LoadingSpinner';
+import HeaderSeparator from './HeaderSeparator';
 import { BsTools } from 'react-icons/bs';
 import { GrDocumentText } from 'react-icons/gr';
 import { GiRaceCar } from 'react-icons/gi';
