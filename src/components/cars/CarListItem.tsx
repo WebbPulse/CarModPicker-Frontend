@@ -11,10 +11,10 @@ interface CarListItemProps {
 const CarListItem: React.FC<CarListItemProps> = ({ car }) => {
   return (
     <Link to={`/cars/${car.id}`} className="block hover:no-underline h-full">
-      {' '}
+      
       {/* Wrap with Link and ensure it takes full height */}
       <Card className="flex flex-col h-full hover:border-indigo-500 border-2 border-transparent transition-colors">
-        {' '}
+        
         {/* Add hover effect */}
         {car.image_url && (
           <img
