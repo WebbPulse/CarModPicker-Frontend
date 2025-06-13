@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import Input from '../../components/Input';
+import Input from '../../components/common/Input';
 import ButtonStretch from '../../components/buttons/StretchButton';
 import apiClient from '../../services/Api';
 import AuthCard from '../../components/auth/AuthCard';
-import { ErrorAlert, ConfirmationAlert } from '../../components/Alerts';
+import { ErrorAlert, ConfirmationAlert } from '../../components/common/Alerts';
 import AuthRedirectLink from '../../components/auth/AuthRedirectLink';
 import useApiRequest from '../../hooks/UseApiRequest';
 import AuthForm from '../../components/auth/AuthForm';

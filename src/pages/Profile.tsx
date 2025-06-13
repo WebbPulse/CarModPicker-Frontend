@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import LoadingSpinner from '../components/LoadingSpinner';
+import LoadingSpinner from '../components/common/LoadingSpinner';
 import PageHeader from '../components/layout/PageHeader';
-import { ConfirmationAlert, ErrorAlert } from '../components/Alerts';
+import { ConfirmationAlert, ErrorAlert } from '../components/common/Alerts';
 import apiClient from '../services/Api';
 import useApiRequest from '../hooks/UseApiRequest';
 import type { UserUpdate, UserRead } from '../types/Api';
-import Input from '../components/Input';
+import Input from '../components/common/Input';
 import ButtonStretch from '../components/buttons/StretchButton';
-import Card from '../components/Card';
+import Card from '../components/common/Card';
 import SectionHeader from '../components/layout/SectionHeader';
-import ProfileInfoItem from '../components/profile/ProfileInfoItem';
+import CardInfoItem from '../components/common/CardInfoItem';
 import AuthCard from '../components/auth/AuthCard';
 import AuthRedirectLink from '../components/auth/AuthRedirectLink';
 import ActionButton from '../components/buttons/ActionButton';
@@ -227,7 +227,7 @@ function Profile() {
         {!isEditing ? (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-300 mb-6">
-              <ProfileInfoItem label="Profile Picture">
+              <CardInfoItem label="Profile Picture">
                 {user.image_url ? (
                   <img
                     src={user.image_url}
@@ -237,16 +237,16 @@ function Profile() {
                 ) : (
                   <p className="text-gray-400">No image set.</p>
                 )}
-              </ProfileInfoItem>
+              </CardInfoItem>
 
               <div className="hidden md:block"></div>
-              <ProfileInfoItem label="Username">
+              <CardInfoItem label="Username:">
                 <p>{user.username}</p>
-              </ProfileInfoItem>
-              <ProfileInfoItem label="Email">
+              </CardInfoItem>
+              <CardInfoItem label="Email:">
                 <p>{user.email}</p>
-              </ProfileInfoItem>
-              <ProfileInfoItem label="Email Verified">
+              </CardInfoItem>
+              <CardInfoItem label="Email Verified">
                 {user.email_verified ? (
                   <ConfirmationAlert message="Yes" />
                 ) : (
@@ -260,10 +260,10 @@ function Profile() {
                     </Link>
                   </div>
                 )}
-              </ProfileInfoItem>
-              <ProfileInfoItem label="Account Status">
+              </CardInfoItem>
+              <CardInfoItem label="Account Status">
                 <p>{user.disabled ? 'Disabled' : 'Active'}</p>
-              </ProfileInfoItem>
+              </CardInfoItem>
             </div>
             <ActionButton onClick={handleEditToggle} className="mr-2">
               Edit Profile

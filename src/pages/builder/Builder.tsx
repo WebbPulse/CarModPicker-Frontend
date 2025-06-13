@@ -1,19 +1,18 @@
 import { useState } from 'react';
 
-import type { CarRead } from '../../types/Api';
 import PageHeader from '../../components/layout/PageHeader';
 
 import CarList from '../../components/cars/CarList';
 import CreateCarForm from '../../components/cars/CreateCarForm';
 import { useAuth } from '../../contexts/AuthContext';
-import Dialog from '../../components/Dialog'; // Import the Dialog component
+import Dialog from '../../components/common/Dialog'; // Import the Dialog component
 
 function Builder() {
   const { user } = useAuth();
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   const [isCreateCarFormOpen, setIsCreateCarFormOpen] = useState(false); // State for dialog
 
-  const handleCarCreated = (newCar: CarRead) => {
+  const handleCarCreated = () => {
     setRefreshTrigger((prev) => prev + 1);
     setIsCreateCarFormOpen(false); // Close dialog on successful creation
   };

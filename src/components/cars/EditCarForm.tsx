@@ -1,27 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import apiClient from '../../services/Api';
 import useApiRequest from '../../hooks/UseApiRequest';
-import type { CarCreate, CarRead } from '../../types/Api';
+import type { CarUpdate, CarRead } from '../../types/Api';
 import Input from '../common/Input';
 import ButtonStretch from '../buttons/StretchButton';
 import { ErrorAlert, ConfirmationAlert } from '../common/Alerts';
-import SectionHeader from '../layout/SectionHeader';
-import Card from '../common/Card';
+import SecondaryButton from '../buttons/SecondaryButton';
 
-interface CreateCarFormProps {
-  onCarCreated: (newCar: CarRead) => void;
+interface EditCarFormProps {
+  car: CarRead;
+  onCarUpdated: (updatedCar: CarRead) => void;
+  onCancel: () => void;
 }
 
-const createCarRequestFn = (payload: CarCreate) =>
-  apiClient.post<CarRead>('/cars/', payload);
+const updateCarRequestFn = (payload: { carId: number; data: CarUpdate }) =>
+  apiClient.put<CarRead>(`/cars/${payload.carId}`, payload.data);
 
-const CreateCarForm: React.FC<CreateCarFormProps> = ({ onCarCreated }) => {
-  const [make, setMake] = useState('');
-  const [model, setModel] = useState('');
-  const [year, setYear] = useState<number | ''>('');
-  const [trim, setTrim] = useState('');
-  const [vin, setVin] = useState('');
-  const [imageUrl, setImageUrl] = useState(''); // Add state for image URL
+const EditCarForm: React.FC<EditCarFormProps> = ({
+  car,
+  onCarUpdated,
+  onCancel,
+}) => {
+  const [make, setMake] = useState(car.make);
+  const [model, setModel] = useState(car.model);
+  const [year, setYear] = useState<number | ''>(car.year);
+  const [trim, setTrim] = useState(car.trim || '');
+  const [vin, setVin] = useState(car.vin || '');
+  const [imageUrl, setImageUrl] = useState(car.image_url || '');
   const [formMessage, setFormMessage] = useState<{
     type: 'success' | 'error';
     text: string;
@@ -30,9 +35,20 @@ const CreateCarForm: React.FC<CreateCarFormProps> = ({ onCarCreated }) => {
   const {
     error: apiError,
     isLoading,
-    executeRequest: executeCreateCar,
+    executeRequest: executeUpdateCar,
     setError: setApiError,
-  } = useApiRequest(createCarRequestFn);
+  } = useApiRequest(updateCarRequestFn);
+
+  useEffect(() => {
+    setMake(car.make);
+    setModel(car.model);
+    setYear(car.year);
+    setTrim(car.trim || '');
+    setVin(car.vin || '');
+    setImageUrl(car.image_url || '');
+    setApiError(null);
+    setFormMessage(null);
+  }, [car, setApiError]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -56,40 +72,43 @@ const CreateCarForm: React.FC<CreateCarFormProps> = ({ onCarCreated }) => {
       return;
     }
 
-    const payload: CarCreate = {
+    const payload: CarUpdate = {
       make: make.trim(),
       model: model.trim(),
       year: Number(year),
       trim: trim.trim() || null,
       vin: vin.trim() || null,
-      image_url: imageUrl.trim() || null, // Add image_url to payload
+      image_url: imageUrl.trim() || null,
     };
 
-    const result = await executeCreateCar(payload);
+    // Check if any data actually changed
+    let hasChanges = false;
+    if (payload.make !== car.make) hasChanges = true;
+    if (payload.model !== car.model) hasChanges = true;
+    if (payload.year !== car.year) hasChanges = true;
+    if (payload.trim !== (car.trim || null)) hasChanges = true;
+    if (payload.vin !== (car.vin || null)) hasChanges = true;
+    if (payload.image_url !== (car.image_url || null)) hasChanges = true;
+
+    if (!hasChanges) {
+      setFormMessage({ type: 'error', text: 'No changes detected.' });
+      return;
+    }
+
+    const result = await executeUpdateCar({ carId: car.id, data: payload });
 
     if (result) {
-      setFormMessage({ type: 'success', text: 'Car created successfully!' });
-      onCarCreated(result);
-      // Reset form
-      setMake('');
-      setModel('');
-      setYear('');
-      setTrim('');
-      setVin('');
-      setImageUrl(''); // Reset image URL
-    } else {
-      // apiError will be set by the hook
-      // setFormMessage({ type: 'error', text: apiError || 'Failed to create car.' });
+      setFormMessage({ type: 'success', text: 'Car updated successfully!' });
+      onCarUpdated(result);
     }
   };
 
   return (
-    <Card className="mb-6">
-      <SectionHeader title="Add a New Car" />
+    <div className="p-1">
       <form onSubmit={handleSubmit} className="space-y-4">
         <Input
           label="Make"
-          id="make"
+          id="edit-make"
           name="make"
           type="text"
           value={make}
@@ -99,7 +118,7 @@ const CreateCarForm: React.FC<CreateCarFormProps> = ({ onCarCreated }) => {
         />
         <Input
           label="Model"
-          id="model"
+          id="edit-model"
           name="model"
           type="text"
           value={model}
@@ -109,7 +128,7 @@ const CreateCarForm: React.FC<CreateCarFormProps> = ({ onCarCreated }) => {
         />
         <Input
           label="Year"
-          id="year"
+          id="edit-year"
           name="year"
           type="number"
           value={year}
@@ -121,7 +140,7 @@ const CreateCarForm: React.FC<CreateCarFormProps> = ({ onCarCreated }) => {
         />
         <Input
           label="Trim (Optional)"
-          id="trim"
+          id="edit-trim"
           name="trim"
           type="text"
           value={trim}
@@ -130,7 +149,7 @@ const CreateCarForm: React.FC<CreateCarFormProps> = ({ onCarCreated }) => {
         />
         <Input
           label="VIN (Optional)"
-          id="vin"
+          id="edit-vin"
           name="vin"
           type="text"
           value={vin}
@@ -139,7 +158,7 @@ const CreateCarForm: React.FC<CreateCarFormProps> = ({ onCarCreated }) => {
         />
         <Input
           label="Image URL (Optional)"
-          id="image_url"
+          id="edit-image_url"
           name="image_url"
           type="url"
           value={imageUrl}
@@ -153,12 +172,22 @@ const CreateCarForm: React.FC<CreateCarFormProps> = ({ onCarCreated }) => {
         {(apiError || formMessage?.type === 'error') && (
           <ErrorAlert message={apiError || formMessage?.text || null} />
         )}
-        <ButtonStretch type="submit" disabled={isLoading}>
-          {isLoading ? 'Adding Car...' : 'Add Car'}
-        </ButtonStretch>
+        <div className="flex space-x-2 pt-2">
+          <ButtonStretch type="submit" disabled={isLoading}>
+            {isLoading ? 'Saving...' : 'Save Changes'}
+          </ButtonStretch>
+          <SecondaryButton
+            type="button"
+            onClick={onCancel}
+            disabled={isLoading}
+            className="w-full"
+          >
+            Cancel
+          </SecondaryButton>
+        </div>
       </form>
-    </Card>
+    </div>
   );
 };
 
-export default CreateCarForm;
+export default EditCarForm;

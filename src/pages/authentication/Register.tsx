@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Input from '../../components/Input';
+import Input from '../../components/common/Input';
 import ButtonStretch from '../../components/buttons/StretchButton';
 import apiClient from '../../services/Api';
 import type { UserCreate, UserRead } from '../../types/Api';
 import AuthCard from '../../components/auth/AuthCard';
-import { ErrorAlert } from '../../components/Alerts';
+import { ErrorAlert } from '../../components/common/Alerts';
 import AuthRedirectLink from '../../components/auth/AuthRedirectLink';
 import useApiRequest from '../../hooks/UseApiRequest';
 import AuthForm from '../../components/auth/AuthForm';

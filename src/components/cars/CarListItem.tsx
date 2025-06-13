@@ -1,7 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router-dom'; // Import Link
 import type { CarRead } from '../../types/Api';
-import Card from '../Card'; // Assuming Card can be used here or a simpler div
-import ProfileInfoItem from '../profile/ProfileInfoItem';
+import Card from '../common/Card';
+import CardInfoItem from '../common/CardInfoItem';
 
 interface CarListItemProps {
   car: CarRead;
@@ -9,8 +10,12 @@ interface CarListItemProps {
 
 const CarListItem: React.FC<CarListItemProps> = ({ car }) => {
   return (
-    <Card>
-      <div className="flex flex-col h-full">
+    <Link to={`/cars/${car.id}`} className="block hover:no-underline h-full">
+      {' '}
+      {/* Wrap with Link and ensure it takes full height */}
+      <Card className="flex flex-col h-full hover:border-indigo-500 border-2 border-transparent transition-colors">
+        {' '}
+        {/* Add hover effect */}
         {car.image_url && (
           <img
             src={car.image_url}
@@ -24,23 +29,22 @@ const CarListItem: React.FC<CarListItemProps> = ({ car }) => {
           </h3>
           <div className="grid grid-cols-1 gap-1 text-xs flex-grow">
             {car.trim && (
-              <ProfileInfoItem label="Trim">
+              <CardInfoItem label="Trim">
                 <p>{car.trim}</p>
-              </ProfileInfoItem>
+              </CardInfoItem>
             )}
             {car.vin && (
-              <ProfileInfoItem label="VIN">
+              <CardInfoItem label="VIN">
                 <p>{car.vin}</p>
-              </ProfileInfoItem>
+              </CardInfoItem>
             )}
-            <ProfileInfoItem label="Car ID">
+            <CardInfoItem label="Car ID">
               <p>{car.id}</p>
-            </ProfileInfoItem>
+            </CardInfoItem>
           </div>
         </div>
-      </div>
-      {/* Future: Add Link to view/manage build lists for this car */}
-    </Card>
+      </Card>
+    </Link>
   );
 };
 

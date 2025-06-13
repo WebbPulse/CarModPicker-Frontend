@@ -9,6 +9,7 @@ import VerifyEmail from './pages/authentication/VerifyEmail.tsx';
 import VerifyEmailConfirm from './pages/authentication/VerifyEmailConfirm.tsx';
 import Profile from './pages/Profile.tsx';
 import Builder from './pages/builder/Builder.tsx';
+import ViewCar from './pages/builder/ViewCar.tsx'; // Add this import
 
 import ViewUser from './pages/ViewUser.tsx';
 
@@ -58,6 +59,8 @@ function App() {
             <Route element={<EmailVerifiedRoute />}>
               <Route path="/profile" element={<Profile />} />
               <Route path="/builder" element={<Builder />} />
+              <Route path="/cars/:carId" element={<ViewCar />} />{' '}
+              {/* Add this route */}
             </Route>
           </Route>
         </Routes>

@@ -2,13 +2,13 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import apiClient from '../services/Api';
 import useApiRequest from '../hooks/UseApiRequest';
-import type { UserRead, CarRead } from '../types/Api';
+import type { UserRead } from '../types/Api';
 import PageHeader from '../components/layout/PageHeader';
-import Card from '../components/Card';
+import Card from '../components/common/Card';
 import SectionHeader from '../components/layout/SectionHeader';
-import ProfileInfoItem from '../components/profile/ProfileInfoItem';
-import LoadingSpinner from '../components/LoadingSpinner';
-import { ErrorAlert } from '../components/Alerts';
+import CardInfoItem from '../components/common/CardInfoItem';
+import LoadingSpinner from '../components/common/LoadingSpinner';
+import { ErrorAlert } from '../components/common/Alerts';
 import CarList from '../components/cars/CarList';
 import Divider from '../components/layout/Divider';
 
@@ -16,13 +16,8 @@ const fetchUserRequestFn = (
   userId: string // userId will be a string from URL params
 ) => apiClient.get<UserRead>(`/users/${userId}`);
 
-// Assumed API endpoint to fetch cars for a specific user ID
-// This might need adjustment based on your actual backend API capabilities
-const fetchCarsByUserIdRequestFn = (userId: string) =>
-  apiClient.get<CarRead[]>(`/cars/?user_id=${userId}`); // Example: /api/cars/?user_id=123
-
 function ViewUser() {
-  const { userId } = useParams<{ userId: string }>(); // Changed from username to userId
+  const { userId: userIdParam } = useParams<{ userId: string }>(); // Renamed for clarity
 
   const {
     data: user,
@@ -31,21 +26,14 @@ function ViewUser() {
     executeRequest: fetchUser,
   } = useApiRequest(fetchUserRequestFn);
 
-  const {
-    data: userCars,
-    isLoading: isLoadingUserCars,
-    error: userCarsError,
-    executeRequest: fetchUserCars,
-  } = useApiRequest(fetchCarsByUserIdRequestFn);
-
   useEffect(() => {
-    if (userId) {
-      fetchUser(userId);
-      fetchUserCars(userId); // Fetch cars for the viewed user
+    if (userIdParam) {
+      fetchUser(userIdParam);
+      // DO NOT fetchUserCars(userIdParam) here; CarList will handle fetching cars.
     }
-  }, [userId, fetchUser, fetchUserCars]); // Dependency array updated to userId
+  }, [userIdParam, fetchUser]); // Dependency array updated
 
-  if (isLoadingUser || isLoadingUserCars) {
+  if (isLoadingUser) {
     return (
       <>
         <PageHeader title="User Profile" />
@@ -60,7 +48,7 @@ function ViewUser() {
         <PageHeader title="User Profile" />
         <Card>
           <ErrorAlert
-            message={`Failed to load profile for User ID "${userId}". ${userApiError}`}
+            message={`Failed to load profile for User ID "${userIdParam}". ${userApiError}`}
           />
         </Card>
       </div>
@@ -72,7 +60,7 @@ function ViewUser() {
       <div>
         <PageHeader title="User Profile" />
         <Card>
-          <ErrorAlert message={`User with ID "${userId}" not found.`} />
+          <ErrorAlert message={`User with ID "${userIdParam}" not found.`} />
         </Card>
       </div>
     );
@@ -84,7 +72,7 @@ function ViewUser() {
       <Card>
         <SectionHeader title="Public Profile Information" />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-300 mb-6">
-          <ProfileInfoItem label="Profile Picture">
+          <CardInfoItem label="Profile Picture">
             {user.image_url ? (
               <img
                 src={user.image_url}
@@ -94,15 +82,15 @@ function ViewUser() {
             ) : (
               <p className="text-gray-400">No image set.</p>
             )}
-          </ProfileInfoItem>
+          </CardInfoItem>
           {/* This div creates an empty cell in the top-right on medium screens and up */}
           <div className="hidden md:block"></div>
-          <ProfileInfoItem label="Username">
+          <CardInfoItem label="Username">
             <p>{user.username}</p>
-          </ProfileInfoItem>
-          <ProfileInfoItem label="User ID">
+          </CardInfoItem>
+          <CardInfoItem label="User ID">
             <p>{user.id}</p>
-          </ProfileInfoItem>
+          </CardInfoItem>
           {/* 
             You can add more ProfileInfoItem components here for other public user data if available.
             For example, if UserRead included a public 'bio' or 'join_date':
@@ -120,10 +108,13 @@ function ViewUser() {
       <Divider />
 
       <CarList
-        userId={user.id}
-        refreshKey={userCars ? userCars.length : undefined} // Use userCars.length as refreshKey
+        userId={user.id} // Pass the numeric user.id to CarList
+        // refreshKey is not strictly necessary here as CarList will fetch when user.id is available/changes.
+        // If ViewUser had actions that should trigger a car list refresh independently,
+        // then a refreshKey would be useful.
         title="Their Cars"
         emptyMessage="This user hasn't added any cars yet."
+        // No onAddCarClick or showAddCarTile for the public view
       />
     </div>
   );

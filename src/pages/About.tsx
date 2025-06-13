@@ -1,4 +1,4 @@
-import LoadingSpinner from '../components/LoadingSpinner';
+import LoadingSpinner from '../components/common/LoadingSpinner';
 
 function About() {
   return (
