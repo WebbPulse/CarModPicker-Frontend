@@ -12,7 +12,7 @@ interface CreateBuildListFormProps {
 }
 
 const createBuildListRequestFn = (payload: BuildListCreate) =>
-  apiClient.post<BuildListRead>('/build_lists/', payload);
+  apiClient.post<BuildListRead>('/build-lists/', payload);
 
 const CreateBuildListForm: React.FC<CreateBuildListFormProps> = ({
   carId,
