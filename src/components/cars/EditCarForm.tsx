@@ -63,10 +63,9 @@ const EditCarForm: React.FC<EditCarFormProps> = ({
       return;
     }
     if (
-      year !== null &&
-      (isNaN(Number(year)) ||
-        Number(year) < 1886 ||
-        Number(year) > new Date().getFullYear() + 1)
+      isNaN(Number(year)) ||
+      Number(year) < 1886 ||
+      Number(year) > new Date().getFullYear() + 1
     ) {
       setFormMessage({ type: 'error', text: 'Please enter a valid year.' });
       return;
