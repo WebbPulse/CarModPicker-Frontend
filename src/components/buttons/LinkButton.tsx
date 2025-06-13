@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link, type LinkProps } from 'react-router-dom';
 
-interface LinkButtonProps extends Omit<LinkProps, 'className'> {
+interface LinkButtonProps extends Omit<LinkProps, 'className' | 'to'> {
+  to: LinkProps['to'];
   children: React.ReactNode;
 }
 
