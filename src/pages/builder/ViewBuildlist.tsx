@@ -127,7 +127,7 @@ function ViewBuildList() {
       setIsDeleteConfirmOpen(false);
       // Navigate to the associated car's page or builder page
       if (buildList.car_id) {
-        navigate(`car/${buildList.car_id}`);
+        navigate(`/cars/${buildList.car_id}`);
       } else {
         navigate('/builder');
       }
