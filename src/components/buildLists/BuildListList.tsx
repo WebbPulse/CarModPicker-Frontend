@@ -32,7 +32,7 @@ const BuildListList: React.FC<BuildListListProps> = ({
   >(null);
 
   const fetchBuildListsByCarIdRequestFn = useCallback(
-    (id: number) => apiClient.get<BuildListRead[]>(`/build_lists/car/${id}`),
+    (id: number) => apiClient.get<BuildListRead[]>(`/build-lists/car/${id}`),
     []
   );
 

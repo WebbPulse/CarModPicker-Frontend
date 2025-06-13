@@ -22,6 +22,7 @@ import Footer from './components/layout/globalFooter/Footer.tsx';
 import ProtectedRoute from './components/routes/ProtectedRoute';
 import EmailVerifiedRoute from './components/routes/EmailVerifiedRoute.tsx';
 import GuestRoute from './components/routes/GuestRoute';
+import ViewBuildList from './pages/builder/ViewBuildlist.tsx';
 
 function App() {
   return (
@@ -60,6 +61,10 @@ function App() {
               <Route path="/profile" element={<Profile />} />
               <Route path="/builder" element={<Builder />} />
               <Route path="/cars/:carId" element={<ViewCar />} />{' '}
+              <Route
+                path="/build-lists/:buildListId"
+                element={<ViewBuildList />}
+              />{' '}
               {/* Add this route */}
             </Route>
           </Route>
