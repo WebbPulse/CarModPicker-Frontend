@@ -18,7 +18,8 @@ import ParentNavigationLink from '../../components/common/ParentNavigationLink';
 import ImageWithPlaceholder from '../../components/common/ImageWithPlaceholder';
 import DeleteConfirmationDialog from '../../components/common/DeleteConfirmationDialog';
 import EditBuildListForm from '../../components/buildLists/EditBuildListForm';
-// import PartList from '../../components/parts/PartList'; // Future: For displaying parts
+import PartList from '../../components/parts/PartList';
+import CreatePartForm from '../../components/parts/CreatePartForm';
 
 const fetchBuildListRequestFn = (buildListId: string) =>
   apiClient.get<BuildListRead>(`/build-lists/${buildListId}`);
@@ -42,7 +43,8 @@ function ViewBuildList() {
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [associatedCar, setAssociatedCar] = useState<CarRead | null>(null);
   const [carOwner, setCarOwner] = useState<UserRead | null>(null);
-  // const [partsRefreshTrigger, setPartsRefreshTrigger] = useState(0); // Future
+  const [partsRefreshTrigger, setPartsRefreshTrigger] = useState(0); // For refreshing PartList
+  const [isCreatePartFormOpen, setIsCreatePartFormOpen] = useState(false); // For CreatePartForm dialog
 
   const {
     data: buildList,
@@ -123,9 +125,7 @@ function ViewBuildList() {
 
     const result = await executeDeleteBuildList(buildListId);
     if (result !== null) {
-      // Assuming null means error from useApiRequest, or check specific success criteria
       setIsDeleteConfirmOpen(false);
-      // Navigate to the associated car's page or builder page
       if (buildList.car_id) {
         navigate(`/cars/${buildList.car_id}`);
       } else {
@@ -134,10 +134,19 @@ function ViewBuildList() {
     }
   };
 
+  // Handlers for Part creation
+  const handlePartCreated = () => {
+    setPartsRefreshTrigger((prev) => prev + 1); // Trigger PartList refresh
+    setIsCreatePartFormOpen(false); // Close dialog
+    // console.log('Part created:', newPart); // Optional: for debugging or further actions
+  };
+
+  const openCreatePartDialog = () => setIsCreatePartFormOpen(true);
+  const closeCreatePartDialog = () => setIsCreatePartFormOpen(false);
+
   const isLoading = isLoadingBuildList || isLoadingCar || isLoadingOwner;
 
   if (isLoading && !buildList) {
-    // Show main loader only if buildList isn't loaded yet
     return (
       <>
         <PageHeader title="Build List Details" />
@@ -247,7 +256,7 @@ function ViewBuildList() {
       <Divider />
 
       {/* Dialog for Editing Build List */}
-      {buildList && (
+      {buildList && canManage && (
         <Dialog
           isOpen={isEditBuildListFormOpen}
           onClose={closeEditBuildListDialog}
@@ -262,7 +271,7 @@ function ViewBuildList() {
       )}
 
       {/* Dialog for Deleting Build List Confirmation */}
-      {buildList && (
+      {buildList && canManage && (
         <DeleteConfirmationDialog
           isOpen={isDeleteConfirmOpen}
           onClose={closeDeleteConfirmDialog}
@@ -274,23 +283,31 @@ function ViewBuildList() {
         />
       )}
 
-      <Divider />
+      {/* Dialog for Creating Part */}
+      {buildList && canManage && (
+        <Dialog
+          isOpen={isCreatePartFormOpen}
+          onClose={closeCreatePartDialog}
+          title={`Add Part to ${buildList.name}`}
+        >
+          <CreatePartForm
+            buildListId={buildList.id}
+            onPartCreated={handlePartCreated}
+          />
+        </Dialog>
+      )}
 
-      {/* Parts Section - Future Implementation */}
-      <SectionHeader title="Parts in this Build List" />
-      {/* 
-        <PartList 
-          buildListId={buildList.id} 
-          canManageParts={canManage} 
-          refreshKey={partsRefreshTrigger} 
-          // onAddPartClick={openCreatePartDialog} // Future
-        /> 
-      */}
-      <Card>
-        <p className="text-gray-400 p-4">
-          Part management functionality coming soon.
-        </p>
-      </Card>
+      {/* Parts Section */}
+      {buildList && (
+        <PartList
+          buildListId={buildList.id}
+          canManageParts={canManage || false}
+          refreshKey={partsRefreshTrigger}
+          onAddPartClick={canManage ? openCreatePartDialog : undefined}
+          title={`Parts in ${buildList.name}`}
+          emptyMessage="This build list currently has no parts."
+        />
+      )}
     </div>
   );
 }
