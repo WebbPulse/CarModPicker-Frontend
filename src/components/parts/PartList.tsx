@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react'; // Added useMemo
 import type { PartRead } from '../../types/Api';
 import PartListItem from './PartListItem';
 import SectionHeader from '../layout/SectionHeader';
@@ -28,7 +28,7 @@ const PartList: React.FC<PartListProps> = ({
   const [internalParts, setInternalParts] = useState<PartRead[] | null>(null);
 
   const fetchPartsByBuildListIdRequestFn = useCallback(
-    (id: number) => apiClient.get<PartRead[]>(`/parts/build-list/${id}`), // Ensure this endpoint exists
+    (id: number) => apiClient.get<PartRead[]>(`/parts/build-list/${id}`),
     []
   );
 
@@ -50,6 +50,11 @@ const PartList: React.FC<PartListProps> = ({
       setInternalParts([]);
     }
   }, [fetchedApiParts, isLoading, error]);
+
+  const totalPrice = useMemo(() => {
+    if (!internalParts) return 0;
+    return internalParts.reduce((sum, part) => sum + (part.price || 0), 0);
+  }, [internalParts]);
 
   if (isLoading) {
     return (
@@ -73,8 +78,16 @@ const PartList: React.FC<PartListProps> = ({
 
   return (
     <div>
-      <SectionHeader title={title} />
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-4">
+      <div className="flex justify-between items-center mb-4"> {/* Container for header and total */}
+        <SectionHeader title={title} />
+        {internalParts && internalParts.length > 0 && (
+          <div className="text-right">
+            <span className="text-sm text-gray-400">Total Est. Price:</span>
+            <p className="text-xl font-bold text-indigo-400">${totalPrice.toFixed(2)}</p>
+          </div>
+        )}
+      </div>
+      <div className="flex flex-col gap-4"> {/* Removed mt-4 as mb-4 is on header container */}
         {canManageParts && onAddPartClick && (
           <AddItemTile
             title="Add New Part"

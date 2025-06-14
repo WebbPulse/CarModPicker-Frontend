@@ -153,6 +153,7 @@ const CreatePartForm: React.FC<CreatePartFormProps> = ({
           disabled={isLoading}
           step="0.01"
           placeholder="e.g., 19.99"
+          
         />
         <Input
           label="Notes (Optional)"

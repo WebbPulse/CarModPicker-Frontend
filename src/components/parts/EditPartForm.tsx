@@ -162,6 +162,7 @@ const EditPartForm: React.FC<EditPartFormProps> = ({
           disabled={isLoading}
           step="0.01"
           placeholder="e.g., 19.99"
+          
         />
 
         {formMessage?.type === 'success' && (

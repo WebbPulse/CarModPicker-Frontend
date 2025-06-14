@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import type { PartRead } from '../../types/Api';
 import Card from '../common/Card';
-import CardInfoItem from '../common/CardInfoItem';
 import ImageWithPlaceholder from '../common/ImageWithPlaceholder';
 
 interface PartListItemProps {
@@ -12,37 +11,42 @@ interface PartListItemProps {
 const PartListItem: React.FC<PartListItemProps> = ({ part }) => {
   return (
     <Link
-      to={`/parts/${part.id}`} // Assuming a route like /parts/:partId for viewing a part
-      className="block hover:no-underline h-full"
+      to={`/parts/${part.id}`}
+      className="block hover:no-underline" // Removed h-full, w-full will be handled by Card
     >
-      <Card className="flex flex-col h-full hover:border-indigo-500 border-2 border-transparent transition-colors">
+      <Card className="flex flex-row items-start gap-4 p-4 hover:border-indigo-500 border-2 border-transparent transition-colors w-full">
         <ImageWithPlaceholder
           srcUrl={part.image_url}
           altText={part.name}
-          imageClassName="w-full h-32 object-cover rounded-md mb-3"
-          containerClassName="w-full h-32 mb-3"
+          imageClassName="w-24 h-24 object-cover rounded-md" // Adjusted size for horizontal layout
+          containerClassName="w-24 h-24 flex-shrink-0"    // Ensure container doesn't shrink image
           fallbackText="No image"
         />
-        <div className="flex-grow flex flex-col">
-          <h3 className="text-lg font-semibold text-indigo-400 mb-2 truncate">
+        <div className="flex-grow flex flex-col justify-start">
+          <h3 className="text-xl font-semibold text-indigo-400 mb-1 truncate">
             {part.name}
           </h3>
           {part.manufacturer && (
-            <p className="text-sm text-gray-400 mb-1 truncate">
+            <p className="text-md text-gray-400 mb-1 truncate">
               By: {part.manufacturer}
             </p>
           )}
-          {part.part_number && (
-            <CardInfoItem label="P/N">
-              <p className="truncate">{part.part_number}</p>
-            </CardInfoItem>
-          )}
-          {part.price !== null && part.price !== undefined && (
-            <CardInfoItem label="Price">
-              <p>${part.price.toFixed(2)}</p>
-            </CardInfoItem>
-          )}
-          <div className="text-xs text-gray-500 mt-auto pt-1"></div>
+          <div className="flex justify-between items-center mt-2 text-sm"> {/* Changed: Added justify-between and items-center */}
+            {part.part_number && (
+              <div>
+                <span className="text-gray-500 font-medium">P/N: </span>
+                <span className="text-gray-300 truncate">{part.part_number}</span>
+              </div>
+            )}
+            {/* Price will be pushed to the right */}
+            {part.price !== null && part.price !== undefined && (
+              <div>
+                {/* Optional: you can remove the "Price: " label if it's implied */}
+                <span className="text-gray-300 font-semibold text-lg">${part.price.toFixed(2)}</span>
+              </div>
+            )}
+          </div>
+          {/* You can add more details here if needed, like part.description (truncated) */}
         </div>
       </Card>
     </Link>
