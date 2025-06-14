@@ -55,18 +55,19 @@ function App() {
             path="/forgot-password/confirm"
             element={<ForgotPasswordConfirm />}
           />
+          <Route path="/cars/:carId" element={<ViewCar />} />{' '}
+          <Route
+                path="/build-lists/:buildListId"
+                element={<ViewBuildList />}
+              />{' '}
+          <Route path="/parts/:partId" element={<ViewPart />} />
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
             <Route path="/verify-email" element={<VerifyEmail />} />
             <Route element={<EmailVerifiedRoute />}>
               <Route path="/profile" element={<Profile />} />
               <Route path="/builder" element={<Builder />} />
-              <Route path="/cars/:carId" element={<ViewCar />} />{' '}
-              <Route
-                path="/build-lists/:buildListId"
-                element={<ViewBuildList />}
-              />{' '}
-              <Route path="/parts/:partId" element={<ViewPart />} />
+              
             </Route>
           </Route>
         </Routes>
