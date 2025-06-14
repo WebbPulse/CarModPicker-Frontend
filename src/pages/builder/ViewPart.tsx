@@ -218,7 +218,7 @@ function ViewPart() {
           )}
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-gray-300 mb-6">
-          <CardInfoItem label="">
+          <CardInfoItem label="Part Image">
             <ImageWithPlaceholder
               srcUrl={part.image_url}
               altText={part.name}
