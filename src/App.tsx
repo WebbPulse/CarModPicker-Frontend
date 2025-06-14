@@ -23,6 +23,7 @@ import ProtectedRoute from './components/routes/ProtectedRoute';
 import EmailVerifiedRoute from './components/routes/EmailVerifiedRoute.tsx';
 import GuestRoute from './components/routes/GuestRoute';
 import ViewBuildList from './pages/builder/ViewBuildlist.tsx';
+import ViewPart from './pages/builder/ViewPart.tsx';
 
 function App() {
   return (
@@ -65,7 +66,7 @@ function App() {
                 path="/build-lists/:buildListId"
                 element={<ViewBuildList />}
               />{' '}
-              {/* Add this route */}
+              <Route path="/parts/:partId" element={<ViewPart />} />
             </Route>
           </Route>
         </Routes>
