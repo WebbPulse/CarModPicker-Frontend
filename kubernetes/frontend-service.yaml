@@ -11,4 +11,4 @@ spec:
   - protocol: TCP
     port: 80 # Port the service will listen on
     targetPort: 80 # Port the frontend pods (Nginx) are listening on
-  type: ClusterIP # Changed to ClusterIP as Ingress will manage external access
+  type: ClusterIP
