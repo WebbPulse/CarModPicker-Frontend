@@ -14,10 +14,13 @@ spec:
       labels:
         app: carmodpicker-frontend
     spec:
+      imagePullSecrets:
+        - name: regcred 
       containers:
       - name: nginx-frontend
         image: webbpulse/carmodpicker:frontend-latest 
         imagePullPolicy: Always # Or IfNotPresent if using local images well known to K8s
+        
         ports:
         - containerPort: 80 # Nginx in your frontend Dockerfile exposes port 80
         resources:
