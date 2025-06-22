@@ -95,7 +95,7 @@ const CreatePartForm: React.FC<CreatePartFormProps> = ({
           required
           disabled={isLoading}
         />
-        <Input // Replace with Input if TextArea is not available
+        <Input 
           label="Description (Optional)"
           id="part-description"
           name="part-description"

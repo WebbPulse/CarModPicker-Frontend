@@ -5,8 +5,8 @@ import ButtonStretch from '../../components/buttons/StretchButton';
 import apiClient from '../../services/Api';
 import AuthRedirectLink from '../../components/auth/AuthRedirectLink';
 import useApiRequest from '../../hooks/UseApiRequest';
-import { useAuth } from '../../contexts/AuthContext'; // Import useAuth
-import LoadingSpinner from '../../components/common/LoadingSpinner'; // Add this import
+import { useAuth } from '../../contexts/AuthContext'; 
+import LoadingSpinner from '../../components/common/LoadingSpinner'; 
 
 function VerifyEmail() {
   const [isSubmitted, setIsSubmitted] = useState(false);

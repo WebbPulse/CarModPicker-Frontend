@@ -27,7 +27,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const checkAuthStatus = async () => {
     setIsLoading(true);
     try {
-      const response = await apiClient.get<UserRead>('/users/me'); // Endpoint from openapi.json
+      const response = await apiClient.get<UserRead>('/users/me'); 
       if (response.data) {
         setUser(response.data);
         setIsAuthenticated(true);
@@ -51,13 +51,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const login = (userData: UserRead) => {
     setUser(userData);
     setIsAuthenticated(true);
-    // Navigation is handled by the Login component after calling this
+   
   };
 
   const logout = async () => {
     setIsLoading(true);
     try {
-      await apiClient.post('/auth/logout'); // Assuming there's a logout endpoint
+      await apiClient.post('/auth/logout'); 
     } catch (error) {
       console.error('Logout failed:', error);
     } finally {

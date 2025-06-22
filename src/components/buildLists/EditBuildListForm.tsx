@@ -67,7 +67,7 @@ const EditBuildListForm: React.FC<EditBuildListFormProps> = ({
       name: name.trim(),
       description: description.trim() || null,
       image_url: imageUrl.trim() || null,
-      // car_id is not updated here as it's fundamental
+     
     };
 
     // Check if any data actually changed
@@ -113,7 +113,7 @@ const EditBuildListForm: React.FC<EditBuildListFormProps> = ({
           label="Description (Optional)"
           id="edit-buildlist-description"
           name="description"
-          type="text" // Consider a TextArea component if available/needed
+          type="text" 
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           disabled={isLoading}

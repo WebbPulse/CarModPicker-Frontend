@@ -8,7 +8,7 @@ const ProtectedRoute: React.FC = () => {
   const location = useLocation();
 
   if (isLoading) {
-    // Optional: Show a global loading spinner or a placeholder
+    
     return <LoadingSpinner />;
   }
 

@@ -1,4 +1,3 @@
-// filepath: src/components/Dialog.tsx
 import React from 'react';
 
 interface DialogProps {

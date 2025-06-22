@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react'; // Added useMemo
+import React, { useState, useEffect, useCallback, useMemo } from 'react'; 
 import type { PartRead } from '../../types/Api';
 import PartListItem from './PartListItem';
 import SectionHeader from '../layout/SectionHeader';
@@ -87,7 +87,7 @@ const PartList: React.FC<PartListProps> = ({
           </div>
         )}
       </div>
-      <div className="flex flex-col gap-4"> {/* Removed mt-4 as mb-4 is on header container */}
+      <div className="flex flex-col gap-4"> 
         {canManageParts && onAddPartClick && (
           <AddItemTile
             title="Add New Part"

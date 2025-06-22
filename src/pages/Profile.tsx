@@ -34,7 +34,7 @@ function Profile() {
     currentPassword: '',
     newPassword: '',
     confirmNewPassword: '',
-    image_url: '', // Add image_url to formData
+    image_url: '',
   });
   const [statusMessage, setStatusMessage] = useState<{
     type: 'success' | 'error' | 'info';
@@ -49,7 +49,7 @@ function Profile() {
         currentPassword: '',
         newPassword: '',
         confirmNewPassword: '',
-        image_url: user.image_url || '', // Initialize image_url
+        image_url: user.image_url || '',
       });
     }
   }, [user]);
@@ -82,7 +82,7 @@ function Profile() {
         currentPassword: '',
         newPassword: '',
         confirmNewPassword: '',
-        image_url: user.image_url || '', // Reset image_url on edit toggle
+        image_url: user.image_url || '',
       });
     }
   };
@@ -180,7 +180,7 @@ function Profile() {
         message: 'Profile updated successfully!',
       });
     }
-    // updateApiError will be set by the hook if there's an error
+   
   };
 
   if (authIsLoading) {

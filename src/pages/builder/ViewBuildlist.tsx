@@ -43,8 +43,8 @@ function ViewBuildList() {
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
   const [associatedCar, setAssociatedCar] = useState<CarRead | null>(null);
   const [carOwner, setCarOwner] = useState<UserRead | null>(null);
-  const [partsRefreshTrigger, setPartsRefreshTrigger] = useState(0); // For refreshing PartList
-  const [isCreatePartFormOpen, setIsCreatePartFormOpen] = useState(false); // For CreatePartForm dialog
+  const [partsRefreshTrigger, setPartsRefreshTrigger] = useState(0); 
+  const [isCreatePartFormOpen, setIsCreatePartFormOpen] = useState(false); 
 
   const {
     data: buildList,
@@ -138,7 +138,7 @@ function ViewBuildList() {
   const handlePartCreated = () => {
     setPartsRefreshTrigger((prev) => prev + 1); // Trigger PartList refresh
     setIsCreatePartFormOpen(false); // Close dialog
-    // console.log('Part created:', newPart); // Optional: for debugging or further actions
+   
   };
 
   const openCreatePartDialog = () => setIsCreatePartFormOpen(true);

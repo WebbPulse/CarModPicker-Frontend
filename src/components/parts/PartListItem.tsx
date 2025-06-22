@@ -12,14 +12,14 @@ const PartListItem: React.FC<PartListItemProps> = ({ part }) => {
   return (
     <Link
       to={`/parts/${part.id}`}
-      className="block hover:no-underline" // Removed h-full, w-full will be handled by Card
+      className="block hover:no-underline" 
     >
       <Card className="flex flex-row items-start gap-4 p-4 hover:border-indigo-500 border-2 border-transparent transition-colors w-full">
         <ImageWithPlaceholder
           srcUrl={part.image_url}
           altText={part.name}
-          imageClassName="w-24 h-24 object-cover rounded-md" // Adjusted size for horizontal layout
-          containerClassName="w-24 h-24 flex-shrink-0"    // Ensure container doesn't shrink image
+          imageClassName="w-24 h-24 object-cover rounded-md" 
+          containerClassName="w-24 h-24 flex-shrink-0"    
           fallbackText="No image"
         />
         <div className="flex-grow flex flex-col justify-start">
@@ -31,14 +31,14 @@ const PartListItem: React.FC<PartListItemProps> = ({ part }) => {
               By: {part.manufacturer}
             </p>
           )}
-          <div className="flex justify-between items-center mt-2 text-sm"> {/* Changed: Added justify-between and items-center */}
+          <div className="flex justify-between items-center mt-2 text-sm"> 
             {part.part_number && (
               <div>
                 <span className="text-gray-500 font-medium">P/N: </span>
                 <span className="text-gray-300 truncate">{part.part_number}</span>
               </div>
             )}
-            {/* Price will be pushed to the right */}
+           
             {part.price !== null && part.price !== undefined && (
               <div>
                 {/* Optional: you can remove the "Price: " label if it's implied */}
@@ -46,7 +46,7 @@ const PartListItem: React.FC<PartListItemProps> = ({ part }) => {
               </div>
             )}
           </div>
-          {/* You can add more details here if needed, like part.description (truncated) */}
+          
         </div>
       </Card>
     </Link>

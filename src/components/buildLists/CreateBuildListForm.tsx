@@ -69,12 +69,10 @@ const CreateBuildListForm: React.FC<CreateBuildListFormProps> = ({
   };
 
   return (
-    // This form is intended to be placed inside a Dialog,
-    // so the outer Card might be redundant depending on Dialog styling.
-    // For standalone use, Card is fine.
+    
     <div className="p-1">
       {' '}
-      {/* Add padding if used directly in Dialog without its own Card */}
+      
       <form onSubmit={handleSubmit} className="space-y-4">
         <Input
           label="Build List Name"
@@ -90,7 +88,7 @@ const CreateBuildListForm: React.FC<CreateBuildListFormProps> = ({
           label="Description (Optional)"
           id="buildlist-description"
           name="buildlist-description"
-          type="text" // Consider changing to textarea if you add that component
+          type="text" 
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           disabled={isLoading}

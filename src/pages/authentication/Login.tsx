@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Input from '../../components/common/Input';
 import ButtonStretch from '../../components/buttons/StretchButton';
 import apiClient from '../../services/Api';
-import type { UserRead } from '../../types/Api'; // Keep UserRead if needed for response type
+import type { UserRead } from '../../types/Api'; 
 import AuthCard from '../../components/auth/AuthCard';
 import { ErrorAlert } from '../../components/common/Alerts';
 import { useAuth } from '../../contexts/AuthContext';

@@ -9,7 +9,7 @@ import VerifyEmail from './pages/authentication/VerifyEmail.tsx';
 import VerifyEmailConfirm from './pages/authentication/VerifyEmailConfirm.tsx';
 import Profile from './pages/Profile.tsx';
 import Builder from './pages/builder/Builder.tsx';
-import ViewCar from './pages/builder/ViewCar.tsx'; // Add this import
+import ViewCar from './pages/builder/ViewCar.tsx'; 
 
 import ViewUser from './pages/ViewUser.tsx';
 

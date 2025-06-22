@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: '/api', // Your API base URL
+  baseURL: '/api', // API base URL
   headers: {
     'Content-Type': 'application/json',
   },
@@ -10,7 +10,7 @@ const apiClient = axios.create({
 
 apiClient.interceptors.request.use(
   (config) => {
-    // If you need to add any custom headers or modify the request, do so here
+    
     return config;
   },
   (error) => {

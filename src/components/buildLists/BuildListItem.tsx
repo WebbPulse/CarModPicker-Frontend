@@ -1,7 +1,7 @@
 import React from 'react';
 import type { BuildListRead } from '../../types/Api';
 import Card from '../common/Card';
-import CardInfoItem from '../common/CardInfoItem'; // Re-using for consistency
+import CardInfoItem from '../common/CardInfoItem'; 
 import { Link } from 'react-router-dom';
 
 interface BuildListItemProps {
@@ -40,7 +40,7 @@ const BuildListItem: React.FC<BuildListItemProps> = ({ buildList }) => {
             </CardInfoItem>
           </div>
         </div>
-        {/* Future: Add Link to view/manage parts for this build list */}
+        
       </Card>
     </Link>
   );

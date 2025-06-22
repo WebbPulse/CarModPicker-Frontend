@@ -7,7 +7,7 @@ interface UseApiRequestReturn<TData, TPayload> {
   error: string | null;
   isLoading: boolean;
   executeRequest: (payload: TPayload) => Promise<TData | null>;
-  setError: (message: string | null) => void; // Allow manually setting/clearing error
+  setError: (message: string | null) => void;
 }
 
 const parseApiError = (err: any): string => {

@@ -3,7 +3,7 @@ import { Link, type LinkProps } from 'react-router-dom';
 
 interface HeaderNavLinkProps extends LinkProps {
   children: React.ReactNode;
-  icon?: React.ReactNode; // Add icon prop
+  icon?: React.ReactNode;
 }
 
 const HeaderNavLink: React.FC<HeaderNavLinkProps> = ({

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useParams, useNavigate } from 'react-router-dom'; 
 import apiClient from '../../services/Api';
 import useApiRequest from '../../hooks/UseApiRequest';
 import type { CarRead, UserRead } from '../../types/Api';
@@ -19,7 +19,7 @@ import ActionButton from '../../components/buttons/ActionButton';
 import EditCarForm from '../../components/cars/EditCarForm';
 import ParentNavigationLink from '../../components/common/ParentNavigationLink';
 import ImageWithPlaceholder from '../../components/common/ImageWithPlaceholder';
-import DeleteConfirmationDialog from '../../components/common/DeleteConfirmationDialog'; // Import the new component
+import DeleteConfirmationDialog from '../../components/common/DeleteConfirmationDialog'; 
 
 const fetchCarRequestFn = (carId: string) =>
   apiClient.get<CarRead>(`/cars/${carId}`);
@@ -28,18 +28,18 @@ const fetchUserRequestFn = (userId: number) =>
   apiClient.get<UserRead>(`/users/${userId}`);
 
 const deleteCarRequestFn = (carId: string) =>
-  apiClient.delete(`/cars/${carId}`); // API call for deleting a car
+  apiClient.delete(`/cars/${carId}`); 
 
 function ViewCar() {
   const { carId } = useParams<{ carId: string }>();
   const { user: currentUser } = useAuth();
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate(); 
   const [isCreateBuildListFormOpen, setIsCreateBuildListFormOpen] =
     useState(false);
   const [buildListRefreshTrigger, setBuildListRefreshTrigger] = useState(0);
   const [isEditCarFormOpen, setIsEditCarFormOpen] = useState(false);
   const [carOwner, setCarOwner] = useState<UserRead | null>(null);
-  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false); // State for delete confirmation dialog
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false); 
 
   const {
     data: car,
@@ -64,7 +64,7 @@ function ViewCar() {
     }
   }, [carId, fetchCar]);
 
-  // Add useEffect to fetch user data when car data is available
+  // useEffect to fetch user data when car data is available
   useEffect(() => {
     if (car?.user_id) {
       fetchUser(car.user_id);

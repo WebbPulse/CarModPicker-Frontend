@@ -22,7 +22,7 @@ import ActionButton from '../../components/buttons/ActionButton';
 import ParentNavigationLink from '../../components/common/ParentNavigationLink';
 import ImageWithPlaceholder from '../../components/common/ImageWithPlaceholder';
 import DeleteConfirmationDialog from '../../components/common/DeleteConfirmationDialog';
-import EditPartForm from '../../components/parts/EditPartForm'; // Import EditPartForm
+import EditPartForm from '../../components/parts/EditPartForm'; 
 
 const fetchPartRequestFn = (partId: string) =>
   apiClient.get<PartRead>(`/parts/${partId}`);
@@ -49,7 +49,7 @@ function ViewPart() {
   const [associatedBuildList, setAssociatedBuildList] =
     useState<BuildListRead | null>(null);
   const [associatedCar, setAssociatedCar] = useState<CarRead | null>(null);
-  const [itemOwner, setItemOwner] = useState<UserRead | null>(null); // Owner of the car/buildlist
+  const [itemOwner, setItemOwner] = useState<UserRead | null>(null); 
 
   const {
     data: part,

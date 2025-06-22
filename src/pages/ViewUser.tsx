@@ -17,7 +17,7 @@ const fetchUserRequestFn = (
 ) => apiClient.get<UserRead>(`/users/${userId}`);
 
 function ViewUser() {
-  const { userId: userIdParam } = useParams<{ userId: string }>(); // Renamed for clarity
+  const { userId: userIdParam } = useParams<{ userId: string }>(); 
 
   const {
     data: user,
@@ -29,7 +29,7 @@ function ViewUser() {
   useEffect(() => {
     if (userIdParam) {
       fetchUser(userIdParam);
-      // DO NOT fetchUserCars(userIdParam) here; CarList will handle fetching cars.
+     
     }
   }, [userIdParam, fetchUser]); // Dependency array updated
 
@@ -91,13 +91,7 @@ function ViewUser() {
           <CardInfoItem label="User ID">
             <p>{user.id}</p>
           </CardInfoItem>
-          {/* 
-            You can add more ProfileInfoItem components here for other public user data if available.
-            For example, if UserRead included a public 'bio' or 'join_date':
-            <ProfileInfoItem label="Join Date">
-              <p>{new Date(user.join_date).toLocaleDateString()}</p>
-            </ProfileInfoItem>
-          */}
+         
         </div>
         <p className="text-sm text-gray-400">
           This is a public user profile. For privacy, detailed account
@@ -108,10 +102,7 @@ function ViewUser() {
       <Divider />
 
       <CarList
-        userId={user.id} // Pass the numeric user.id to CarList
-        // refreshKey is not strictly necessary here as CarList will fetch when user.id is available/changes.
-        // If ViewUser had actions that should trigger a car list refresh independently,
-        // then a refreshKey would be useful.
+        userId={user.id} 
         title="Their Cars"
         emptyMessage="This user hasn't added any cars yet."
         // No onAddCarClick or showAddCarTile for the public view
